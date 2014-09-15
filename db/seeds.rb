@@ -1,5 +1,3 @@
-require_relative '../config/database'
-
 require_relative '../lib/models/device'
 require_relative '../lib/models/cart'
 
@@ -10,30 +8,43 @@ module OnOff
       DataMapper.auto_migrate!
       DataMapper.auto_upgrade!
 
-      create_devices
+      device_groups = create_device_groups
+      create_devices(device_groups)
     end
 
     private
-    def create_devices
-     [
-        { title: 'Розетка' },
-        { title: 'Розетка с крышкой' },
-        { title: 'Выключатель 1 кл.' },
-        { title: 'Выключатель 2 кл.' },
-        { title: 'Розетка ТВ' },
-        { title: 'Розетка ТВ+Спутник' },
-        { title: 'Розетка компьютерная' },
-        { title: 'Розетка телефонная' },
-        { title: 'Диммер поворотный' },
-        { title: 'Рамка 1-ая' },
-        { title: 'Рамка 2-ая' },
-        { title: 'Рамка 3-ая' },
-        { title: 'Рамка 4-ая' },
-        { title: 'Рамка 5-ая' }
-      ].each do |device|
-         Models::Device.create device
+      def create_device_groups
+        Models::DeviceGroup.create_all([
+          { title: 'Розетка' },
+          { title: 'Выключатель' },
+          { title: 'Диммер' },
+          { title: 'Рамка' }
+        ])
       end
-    end
+
+      def create_devices(device_groups)
+        jacks     = device_groups.first(title: 'Розетка')
+        switches  = device_groups.first(title: 'Выключатель')
+        dimmers   = device_groups.first(title: 'Диммер')
+        frames    = device_groups.first(title: 'Рамка')
+
+        Models::Device.create_all([
+          { title: 'Розетка', device_group: jacks },
+          { title: 'Розетка с крышкой', device_group: jacks },
+          { title: 'Выключатель 1 кл.', device_group: switches },
+          { title: 'Выключатель 2 кл.', device_group: switches },
+          { title: 'Розетка ТВ', device_group: jacks },
+          { title: 'Розетка ТВ+Спутник', device_group: jacks },
+          { title: 'Розетка компьютерная', device_group: jacks },
+          { title: 'Розетка телефонная', device_group: jacks },
+          { title: 'Диммер поворотный', device_group: dimmers },
+          { title: 'Рамка 1-ая', device_group: frames },
+          { title: 'Рамка 2-ая', device_group: frames },
+          { title: 'Рамка 3-ая', device_group: frames },
+          { title: 'Рамка 4-ая', device_group: frames },
+          { title: 'Рамка 5-ая', device_group: frames }
+        ])
+      end
 
     # manufacturers = Manufacturer.create([
     #   { title: 'EPJ', assembly: 'Мотор Сич', country: 'Украина' },

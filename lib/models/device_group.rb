@@ -1,15 +1,14 @@
 require_relative './base'
-require_relative './device_group'
 
 module OnOff
   module Models
-    class Device < Base
+    class DeviceGroup < Base
       include DataMapper::Resource
 
       property :id, Serial
       property :title, String, required: true
 
-      belongs_to :device_group
+      has n, :devices
 
       property :created_at, DateTime
       property :updated_at, DateTime

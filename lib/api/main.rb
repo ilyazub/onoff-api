@@ -3,11 +3,11 @@ require 'grape'
 require_relative '../models/device'
 require_relative '../models/cart'
 
-DataMapper.finalize
-
 module OnOff
   module API
     class Main < ::Grape::API
+      DataMapper.finalize
+
       format :json
 
       resource :devices do
