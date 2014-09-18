@@ -1,13 +1,20 @@
 require_relative './base'
+require_relative '../entities/cart'
 
 module OnOff
-  module Models
-    class Cart < Base
-      include DataMapper::Resource
+  module API
+    module Models
+      class Cart < Base
+        include DataMapper::Resource
 
-      property :session_id, String, key: true
-      property :created_at, DateTime
-      property :updated_at, DateTime
+        property :id, UUID, key: true, required: true, default: proc { UUIDTools::UUID.random_create }
+
+        timestamps :at
+
+        def entity
+          Entities::Cart.new(self)
+        end
+      end
     end
   end
 end

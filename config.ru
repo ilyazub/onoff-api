@@ -4,9 +4,9 @@ require 'rack/cors'
 
 use Rack::Cors do
   allow do
-    origins 'localhost:9000', '127.0.0.1:9000'
-    resource '*', headers: :'*', methods: :get
+    origins '*'
+    resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
   end
 end
 
-run OnOff::API::Main
+run OnOff::API::Routes::Main

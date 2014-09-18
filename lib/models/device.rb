@@ -1,18 +1,23 @@
-require_relative './base'
 require_relative './device_group'
+require_relative '../entities/device'
 
 module OnOff
-  module Models
-    class Device < Base
-      include DataMapper::Resource
+  module API
+    module Models
+      class Device < Base
+        include DataMapper::Resource
 
-      property :id, Serial
-      property :title, String, required: true
+        property :id, Serial, key: true, required: true
+        property :title, String, required: true
 
-      belongs_to :device_group
+        belongs_to :device_group, required: true
 
-      property :created_at, DateTime
-      property :updated_at, DateTime
+        timestamps :at
+
+        def entity
+          Entities::Device.new(self)
+        end
+      end
     end
   end
 end
