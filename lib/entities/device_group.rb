@@ -4,7 +4,7 @@ module OnOff
   module API
     module Entities
       class DeviceGroup < Base
-        expose :title
+        expose :title, documentation: { type: 'String' }
       end
     end
   end

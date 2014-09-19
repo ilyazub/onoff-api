@@ -1,5 +1,5 @@
 require_relative '../lib/models/device'
-require_relative '../lib/models/cart'
+require_relative '../lib/models/cart_item'
 
 module OnOff
   module API

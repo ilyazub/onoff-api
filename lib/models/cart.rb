@@ -9,11 +9,11 @@ module OnOff
 
         property :id, UUID, key: true, required: true, default: proc { UUIDTools::UUID.random_create }
 
+        has n, :cart_items
+
         timestamps :at
 
-        def entity
-          Entities::Cart.new(self)
-        end
+        Entity =  Entities::Cart
       end
     end
   end

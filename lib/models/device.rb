@@ -11,12 +11,11 @@ module OnOff
         property :title, String, required: true
 
         belongs_to :device_group, required: true
+        has n, :cart_items
 
         timestamps :at
 
-        def entity
-          Entities::Device.new(self)
-        end
+        Entity = Entities::Device
       end
     end
   end

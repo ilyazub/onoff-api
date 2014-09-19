@@ -1,4 +1,4 @@
-require_relative './base'
+require_relative './cart_item'
 
 module OnOff
   module API
@@ -7,6 +7,7 @@ module OnOff
         expose :id, documentation: { type: 'String', desc: 'UUID of the cart' } do |cart, options|
           cart.id.to_s
         end
+        expose :cart_items, using: CartItem
       end
     end
   end
