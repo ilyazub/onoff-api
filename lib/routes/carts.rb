@@ -29,7 +29,7 @@ module OnOff
               requires :amount, type: Integer, desc: 'Amount of added devices'
             end
             post do
-              present Models::CartItem.create_or_update(params.slice(:cart_id, :device_id, :amount))
+              present Models::CartItem.create(params.slice(:cart_id, :device_id, :amount))
             end
 
             desc 'Updates cart item'

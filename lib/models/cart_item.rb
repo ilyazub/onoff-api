@@ -15,8 +15,6 @@ module OnOff
         belongs_to :device, required: true
         belongs_to :cart, required: true
 
-        validates_uniqueness_of :device, scope: :cart
-
         timestamps :at
 
         Entity = Entities::CartItem
