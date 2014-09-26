@@ -1,4 +1,5 @@
 require_relative './cart_item'
+# require_relative './series'
 
 module OnOff
   module API
@@ -8,6 +9,9 @@ module OnOff
           cart.id.to_s
         end
         expose :cart_items, using: CartItem
+        # expose :series, using: Series do |cart, options|
+        #   cart.devices.series
+        # end
       end
     end
   end

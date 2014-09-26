@@ -12,19 +12,18 @@ module OnOff
         property :id, Serial, key: true, required: true
         property :amount, Integer, required: true, default: 0
 
-        belongs_to :device, required: true
-        belongs_to :cart, required: true
+        belongs_to :cart
+        belongs_to :device
 
         timestamps :at
 
         Entity = Entities::CartItem
 
         def self.create_or_update(attributes)
-          cart_item = Models::CartItem.first_or_create(attributes.slice(:device_id, :cart_id))
+          first_or_create(attributes.slice(:device_id, :cart_id))
+          update(amount: amount + attributes[:amount].to_i)
 
-          cart_item.update(amount: cart_item.amount + attributes[:amount].to_i)
-
-          cart_item
+          self
         end
       end
     end

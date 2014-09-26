@@ -1,4 +1,6 @@
 require_relative './base'
+require_relative './device'
+require_relative './series'
 
 module OnOff
   module API
@@ -7,8 +9,8 @@ module OnOff
         expose :id, documentation: { type: 'Integer' }
         expose :amount, documentation: { type: 'Integer' }
         expose :device, using: Device
-        expose :cart_id, documentation: { type: 'String', desc: 'UUID of the cart' } do |cart_item, options|
-          cart_item.cart_id.to_s
+        expose :series, using: Series do |cart_item, options|
+          cart_item.device.series
         end
       end
     end

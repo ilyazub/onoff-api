@@ -1,5 +1,4 @@
-require_relative '../lib/models/device'
-require_relative '../lib/models/cart_item'
+Dir["#{File.dirname(__FILE__) }/../lib/models/*.rb"].each {|file| require file }
 
 module OnOff
   module API
@@ -12,6 +11,10 @@ module OnOff
 
           device_groups = create_device_groups
           create_devices(device_groups)
+
+          create_series
+          create_manufacturers
+          create_device_series
         end
 
         private
@@ -48,34 +51,133 @@ module OnOff
             ])
           end
 
-        # manufacturers = Manufacturer.create([
-        #   { title: 'EPJ', assembly: 'Мотор Сич', country: 'Украина' },
-        #   { title: 'Busch Jaeger', assembly: 'ABB', country: 'Германия' },
-        #   { title: 'NIE', assembly: 'Moeller', country: 'Германия' }
-        # ])
+          def create_series
+            series = Models::Series.create_all([
+              { title: 'Swing' },
+              { title: 'Tango' },
+              { title: 'Element' },
+              { title: 'Neo' },
+              { title: 'Time' },
+              { title: 'Time Arbo' },
+              { title: 'Basic 55' },
+              { title: 'Busch-Duro Reflex' },
+              { title: 'Spring' },
+              { title: 'Alpha' },
+              { title: 'Future Linear' },
+              { title: 'Solo' },
+              { title: 'Axcent' },
+              { title: 'Impuls' },
+              { title: 'Steel' },
+              { title: 'Tacto' },
+              { title: 'Zenit' }
+            ])
+          end
+
+          def create_manufacturers
+            manufacturers = Models::Manufacturer.create_all([
+              { title: 'EPJ', assembly: 'Мотор Сич', country: 'Украина' },
+              { title: 'Busch Jaeger', assembly: 'ABB', country: 'Германия' },
+              { title: 'NIE', assembly: 'Moeller', country: 'Германия' }
+            ])
+          end
+
+          def create_device_series
+            device_series = Models::DeviceSeries.create_all([
+              { device_id: 1, series_id: 1, manufacturer_id: 1 },
+              { device_id: 1, series_id: 2, manufacturer_id: 1 },
+              { device_id: 1, series_id: 3, manufacturer_id: 1 },
+              { device_id: 1, series_id: 4, manufacturer_id: 1 },
+              { device_id: 1, series_id: 5, manufacturer_id: 1 },
+              { device_id: 1, series_id: 6, manufacturer_id: 1 },
+              { device_id: 2, series_id: 1, manufacturer_id: 1 },
+              { device_id: 2, series_id: 2, manufacturer_id: 1 },
+              { device_id: 2, series_id: 3, manufacturer_id: 1 },
+              { device_id: 2, series_id: 4, manufacturer_id: 1 },
+              { device_id: 2, series_id: 5, manufacturer_id: 1 },
+              { device_id: 2, series_id: 6, manufacturer_id: 1 },
+              { device_id: 3, series_id: 1, manufacturer_id: 1 },
+              { device_id: 3, series_id: 2, manufacturer_id: 1 },
+              { device_id: 3, series_id: 3, manufacturer_id: 1 },
+              { device_id: 3, series_id: 4, manufacturer_id: 1 },
+              { device_id: 3, series_id: 5, manufacturer_id: 1 },
+              { device_id: 3, series_id: 6, manufacturer_id: 1 },
+              { device_id: 4, series_id: 1, manufacturer_id: 1 },
+              { device_id: 4, series_id: 2, manufacturer_id: 1 },
+              { device_id: 4, series_id: 3, manufacturer_id: 1 },
+              { device_id: 4, series_id: 4, manufacturer_id: 1 },
+              { device_id: 4, series_id: 5, manufacturer_id: 1 },
+              { device_id: 4, series_id: 6, manufacturer_id: 1 },
+              { device_id: 5, series_id: 1, manufacturer_id: 1 },
+              { device_id: 5, series_id: 2, manufacturer_id: 1 },
+              { device_id: 5, series_id: 3, manufacturer_id: 1 },
+              { device_id: 5, series_id: 4, manufacturer_id: 1 },
+              { device_id: 5, series_id: 5, manufacturer_id: 1 },
+              { device_id: 5, series_id: 6, manufacturer_id: 1 },
+              { device_id: 1, series_id: 7, manufacturer_id: 2 },
+              { device_id: 1, series_id: 8, manufacturer_id: 2 },
+              { device_id: 1, series_id: 9, manufacturer_id: 2 },
+              { device_id: 1, series_id: 10, manufacturer_id: 2 },
+              { device_id: 1, series_id: 11, manufacturer_id: 2 },
+              { device_id: 1, series_id: 12, manufacturer_id: 2 },
+              { device_id: 2, series_id: 7, manufacturer_id: 2 },
+              { device_id: 2, series_id: 8, manufacturer_id: 2 },
+              { device_id: 2, series_id: 9, manufacturer_id: 2 },
+              { device_id: 2, series_id: 10, manufacturer_id: 2 },
+              { device_id: 2, series_id: 11, manufacturer_id: 2 },
+              { device_id: 2, series_id: 12, manufacturer_id: 2 },
+              { device_id: 3, series_id: 7, manufacturer_id: 2 },
+              { device_id: 3, series_id: 8, manufacturer_id: 2 },
+              { device_id: 3, series_id: 9, manufacturer_id: 2 },
+              { device_id: 3, series_id: 10, manufacturer_id: 2 },
+              { device_id: 3, series_id: 11, manufacturer_id: 2 },
+              { device_id: 3, series_id: 12, manufacturer_id: 2 },
+              { device_id: 4, series_id: 7, manufacturer_id: 2 },
+              { device_id: 4, series_id: 8, manufacturer_id: 2 },
+              { device_id: 4, series_id: 9, manufacturer_id: 2 },
+              { device_id: 4, series_id: 10, manufacturer_id: 2 },
+              { device_id: 4, series_id: 11, manufacturer_id: 2 },
+              { device_id: 4, series_id: 12, manufacturer_id: 2 },
+              { device_id: 5, series_id: 7, manufacturer_id: 2 },
+              { device_id: 5, series_id: 8, manufacturer_id: 2 },
+              { device_id: 5, series_id: 9, manufacturer_id: 2 },
+              { device_id: 5, series_id: 10, manufacturer_id: 2 },
+              { device_id: 5, series_id: 11, manufacturer_id: 2 },
+              { device_id: 5, series_id: 12, manufacturer_id: 2 },
+              { device_id: 1, series_id: 13, manufacturer_id: 3 },
+              { device_id: 9, series_id: 14, manufacturer_id: 3 },
+              { device_id: 7, series_id: 15, manufacturer_id: 3 },
+              { device_id: 13, series_id: 16, manufacturer_id: 3 },
+              { device_id: 8, series_id: 17, manufacturer_id: 3 },
+              { device_id: 10, series_id: 17, manufacturer_id: 3 },
+              { device_id: 2, series_id: 13, manufacturer_id: 3 },
+              { device_id: 10, series_id: 14, manufacturer_id: 3 },
+              { device_id: 8, series_id: 15, manufacturer_id: 3 },
+              { device_id: 14, series_id: 16, manufacturer_id: 3 },
+              { device_id: 9, series_id: 17, manufacturer_id: 3 },
+              { device_id: 14, series_id: 17, manufacturer_id: 3 },
+              { device_id: 3, series_id: 13, manufacturer_id: 3 },
+              { device_id: 3, series_id: 14, manufacturer_id: 3 },
+              { device_id: 3, series_id: 15, manufacturer_id: 3 },
+              { device_id: 3, series_id: 16, manufacturer_id: 3 },
+              { device_id: 5, series_id: 17, manufacturer_id: 3 },
+              { device_id: 8, series_id: 16, manufacturer_id: 3 },
+              { device_id: 4, series_id: 13, manufacturer_id: 3 },
+              { device_id: 4, series_id: 14, manufacturer_id: 3 },
+              { device_id: 4, series_id: 15, manufacturer_id: 3 },
+              { device_id: 4, series_id: 16, manufacturer_id: 3 },
+              { device_id: 11, series_id: 17, manufacturer_id: 3 },
+              { device_id: 13, series_id: 17, manufacturer_id: 3 },
+              { device_id: 5, series_id: 13, manufacturer_id: 3 },
+              { device_id: 5, series_id: 14, manufacturer_id: 3 },
+              { device_id: 5, series_id: 15, manufacturer_id: 3 },
+              { device_id: 5, series_id: 16, manufacturer_id: 3 },
+              { device_id: 12, series_id: 17, manufacturer_id: 3 },
+              { device_id: 4, series_id: 17, manufacturer_id: 3 }
+            ])
+          end
 
         # options = Option.create([
         #   { title: 'Цвет' }
-        # ])
-
-        # series = Series.create([
-        #   { title: 'Swing' },
-        #   { title: 'Tango' },
-        #   { title: 'Element' },
-        #   { title: 'Neo' },
-        #   { title: 'Time' },
-        #   { title: 'Time Arbo' },
-        #   { title: 'Basic 55' },
-        #   { title: 'Busch-Duro Reflex' },
-        #   { title: 'Spring' },
-        #   { title: 'Alpha' },
-        #   { title: 'Future Linear' },
-        #   { title: 'Solo' },
-        #   { title: 'Axcent' },
-        #   { title: 'Impuls' },
-        #   { title: 'Steel' },
-        #   { title: 'Tacto' },
-        #   { title: 'Zenit' }
         # ])
 
         # stock_keeping_units = StockKeepingUnit.create([
@@ -118,99 +220,6 @@ module OnOff
         #   { title: '3558A-A651 X', price: rand(1..100.0) },
         #   { title: '3559M-A00651 X', price: rand(1..100.0) },
         #   { title: '3558E-A00651 X', price: rand(1..100.0) }
-        # ])
-
-        # device_series = DeviceSeries.create([
-        #   { device_id: 1, series_id: 1, manufacturer_id: 1 },
-        #   { device_id: 1, series_id: 2, manufacturer_id: 1 },
-        #   { device_id: 1, series_id: 3, manufacturer_id: 1 },
-        #   { device_id: 1, series_id: 4, manufacturer_id: 1 },
-        #   { device_id: 1, series_id: 5, manufacturer_id: 1 },
-        #   { device_id: 1, series_id: 6, manufacturer_id: 1 },
-        #   { device_id: 2, series_id: 1, manufacturer_id: 1 },
-        #   { device_id: 2, series_id: 2, manufacturer_id: 1 },
-        #   { device_id: 2, series_id: 3, manufacturer_id: 1 },
-        #   { device_id: 2, series_id: 4, manufacturer_id: 1 },
-        #   { device_id: 2, series_id: 5, manufacturer_id: 1 },
-        #   { device_id: 2, series_id: 6, manufacturer_id: 1 },
-        #   { device_id: 3, series_id: 1, manufacturer_id: 1 },
-        #   { device_id: 3, series_id: 2, manufacturer_id: 1 },
-        #   { device_id: 3, series_id: 3, manufacturer_id: 1 },
-        #   { device_id: 3, series_id: 4, manufacturer_id: 1 },
-        #   { device_id: 3, series_id: 5, manufacturer_id: 1 },
-        #   { device_id: 3, series_id: 6, manufacturer_id: 1 },
-        #   { device_id: 4, series_id: 1, manufacturer_id: 1 },
-        #   { device_id: 4, series_id: 2, manufacturer_id: 1 },
-        #   { device_id: 4, series_id: 3, manufacturer_id: 1 },
-        #   { device_id: 4, series_id: 4, manufacturer_id: 1 },
-        #   { device_id: 4, series_id: 5, manufacturer_id: 1 },
-        #   { device_id: 4, series_id: 6, manufacturer_id: 1 },
-        #   { device_id: 5, series_id: 1, manufacturer_id: 1 },
-        #   { device_id: 5, series_id: 2, manufacturer_id: 1 },
-        #   { device_id: 5, series_id: 3, manufacturer_id: 1 },
-        #   { device_id: 5, series_id: 4, manufacturer_id: 1 },
-        #   { device_id: 5, series_id: 5, manufacturer_id: 1 },
-        #   { device_id: 5, series_id: 6, manufacturer_id: 1 },
-        #   { device_id: 1, series_id: 7, manufacturer_id: 2 },
-        #   { device_id: 1, series_id: 8, manufacturer_id: 2 },
-        #   { device_id: 1, series_id: 9, manufacturer_id: 2 },
-        #   { device_id: 1, series_id: 10, manufacturer_id: 2 },
-        #   { device_id: 1, series_id: 11, manufacturer_id: 2 },
-        #   { device_id: 1, series_id: 12, manufacturer_id: 2 },
-        #   { device_id: 2, series_id: 7, manufacturer_id: 2 },
-        #   { device_id: 2, series_id: 8, manufacturer_id: 2 },
-        #   { device_id: 2, series_id: 9, manufacturer_id: 2 },
-        #   { device_id: 2, series_id: 10, manufacturer_id: 2 },
-        #   { device_id: 2, series_id: 11, manufacturer_id: 2 },
-        #   { device_id: 2, series_id: 12, manufacturer_id: 2 },
-        #   { device_id: 3, series_id: 7, manufacturer_id: 2 },
-        #   { device_id: 3, series_id: 8, manufacturer_id: 2 },
-        #   { device_id: 3, series_id: 9, manufacturer_id: 2 },
-        #   { device_id: 3, series_id: 10, manufacturer_id: 2 },
-        #   { device_id: 3, series_id: 11, manufacturer_id: 2 },
-        #   { device_id: 3, series_id: 12, manufacturer_id: 2 },
-        #   { device_id: 4, series_id: 7, manufacturer_id: 2 },
-        #   { device_id: 4, series_id: 8, manufacturer_id: 2 },
-        #   { device_id: 4, series_id: 9, manufacturer_id: 2 },
-        #   { device_id: 4, series_id: 10, manufacturer_id: 2 },
-        #   { device_id: 4, series_id: 11, manufacturer_id: 2 },
-        #   { device_id: 4, series_id: 12, manufacturer_id: 2 },
-        #   { device_id: 5, series_id: 7, manufacturer_id: 2 },
-        #   { device_id: 5, series_id: 8, manufacturer_id: 2 },
-        #   { device_id: 5, series_id: 9, manufacturer_id: 2 },
-        #   { device_id: 5, series_id: 10, manufacturer_id: 2 },
-        #   { device_id: 5, series_id: 11, manufacturer_id: 2 },
-        #   { device_id: 5, series_id: 12, manufacturer_id: 2 },
-        #   { device_id: 1, series_id: 13, manufacturer_id: 3 },
-        #   { device_id: 9, series_id: 14, manufacturer_id: 3 },
-        #   { device_id: 7, series_id: 15, manufacturer_id: 3 },
-        #   { device_id: 13, series_id: 16, manufacturer_id: 3 },
-        #   { device_id: 8, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 10, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 2, series_id: 13, manufacturer_id: 3 },
-        #   { device_id: 10, series_id: 14, manufacturer_id: 3 },
-        #   { device_id: 8, series_id: 15, manufacturer_id: 3 },
-        #   { device_id: 14, series_id: 16, manufacturer_id: 3 },
-        #   { device_id: 9, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 14, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 3, series_id: 13, manufacturer_id: 3 },
-        #   { device_id: 3, series_id: 14, manufacturer_id: 3 },
-        #   { device_id: 3, series_id: 15, manufacturer_id: 3 },
-        #   { device_id: 3, series_id: 16, manufacturer_id: 3 },
-        #   { device_id: 15, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 18, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 4, series_id: 13, manufacturer_id: 3 },
-        #   { device_id: 4, series_id: 14, manufacturer_id: 3 },
-        #   { device_id: 4, series_id: 15, manufacturer_id: 3 },
-        #   { device_id: 4, series_id: 16, manufacturer_id: 3 },
-        #   { device_id: 11, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 13, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 5, series_id: 13, manufacturer_id: 3 },
-        #   { device_id: 5, series_id: 14, manufacturer_id: 3 },
-        #   { device_id: 5, series_id: 15, manufacturer_id: 3 },
-        #   { device_id: 5, series_id: 16, manufacturer_id: 3 },
-        #   { device_id: 12, series_id: 17, manufacturer_id: 3 },
-        #   { device_id: 19, series_id: 17, manufacturer_id: 3 }
         # ])
 
         # series_options = SeriesOption.create([

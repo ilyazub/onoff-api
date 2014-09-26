@@ -10,6 +10,7 @@ module OnOff
         property :id, UUID, key: true, required: true, default: proc { UUIDTools::UUID.random_create }
 
         has n, :cart_items
+        has n, :devices, through: :cart_items
 
         timestamps :at
 

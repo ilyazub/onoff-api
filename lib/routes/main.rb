@@ -1,7 +1,8 @@
 require 'grape'
 
-require_relative './devices'
 require_relative './carts'
+require_relative './devices'
+require_relative './cart_items'
 
 module OnOff
   module API
@@ -12,8 +13,9 @@ module OnOff
         format :json
         default_format :json
 
-        mount Carts
         mount Devices
+        mount Carts
+        mount CartItems
       end
     end
   end
