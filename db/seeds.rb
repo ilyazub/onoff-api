@@ -1,4 +1,6 @@
-Dir["#{File.dirname(__FILE__) }/../lib/models/*.rb"].each {|file| require file }
+Dir["#{File.dirname(__FILE__) }/../lib/models/*.rb"].each { |file| require file }
+
+require 'parallel'
 
 module OnOff
   module API
@@ -9,12 +11,22 @@ module OnOff
           DataMapper.auto_migrate!
           DataMapper.auto_upgrade!
 
-          device_groups = create_device_groups
-          create_devices(device_groups)
+          create_device_groups
 
+          create_devices
           create_series
           create_manufacturers
+
           create_device_series
+
+          create_stock_keeping_units
+          create_device_series_stock_keeping_units
+
+          # create_options
+          # create_tags
+
+          # create_device_series_options
+          # create_device_series_taggings
         end
 
         private
@@ -23,15 +35,19 @@ module OnOff
               { title: 'Розетка' },
               { title: 'Выключатель' },
               { title: 'Диммер' },
-              { title: 'Рамка' }
+              { title: 'Рамка' },
+              { title: 'Опция 1' }
             ])
           end
 
-          def create_devices(device_groups)
-            jacks     = device_groups.first(title: 'Розетка')
-            switches  = device_groups.first(title: 'Выключатель')
-            dimmers   = device_groups.first(title: 'Диммер')
-            frames    = device_groups.first(title: 'Рамка')
+          def create_devices
+            device_groups = Models::DeviceGroup.all
+
+            jacks         = device_groups.first(title: 'Розетка')
+            switches      = device_groups.first(title: 'Выключатель')
+            dimmers       = device_groups.first(title: 'Диммер')
+            frames        = device_groups.first(title: 'Рамка')
+            first_option  = device_groups.first(title: 'Опция 1')
 
             Models::Device.create_all([
               { title: 'Розетка', device_group: jacks },
@@ -47,206 +63,190 @@ module OnOff
               { title: 'Рамка 2-ая', device_group: frames },
               { title: 'Рамка 3-ая', device_group: frames },
               { title: 'Рамка 4-ая', device_group: frames },
-              { title: 'Рамка 5-ая', device_group: frames }
+              { title: 'Рамка 5-ая', device_group: frames },
+              # { title: 'Декоративная накладка', device_group: first_option }
             ])
           end
 
           def create_series
             series = Models::Series.create_all([
-              { title: 'Swing' },
-              { title: 'Tango' },
-              { title: 'Element' },
-              { title: 'Neo' },
-              { title: 'Time' },
-              { title: 'Time Arbo' },
               { title: 'Basic 55' },
               { title: 'Busch-Duro Reflex' },
               { title: 'Spring' },
               { title: 'Alpha' },
-              { title: 'Future Linear' },
+              { title: 'Future/Future Linear' },
               { title: 'Solo' },
               { title: 'Axcent' },
               { title: 'Impuls' },
               { title: 'Steel' },
-              { title: 'Tacto' },
-              { title: 'Zenit' }
+              { title: 'Carat' }
             ])
           end
 
           def create_manufacturers
             manufacturers = Models::Manufacturer.create_all([
-              { title: 'EPJ', assembly: 'Мотор Сич', country: 'Украина' },
-              { title: 'Busch Jaeger', assembly: 'ABB', country: 'Германия' },
-              { title: 'NIE', assembly: 'Moeller', country: 'Германия' }
+              { title: 'Busch Jaeger', assembly: 'ABB', country: 'Германия' }
             ])
           end
 
           def create_device_series
-            device_series = Models::DeviceSeries.create_all([
-              { device_id: 1, series_id: 1, manufacturer_id: 1 },
-              { device_id: 1, series_id: 2, manufacturer_id: 1 },
-              { device_id: 1, series_id: 3, manufacturer_id: 1 },
-              { device_id: 1, series_id: 4, manufacturer_id: 1 },
-              { device_id: 1, series_id: 5, manufacturer_id: 1 },
-              { device_id: 1, series_id: 6, manufacturer_id: 1 },
-              { device_id: 2, series_id: 1, manufacturer_id: 1 },
-              { device_id: 2, series_id: 2, manufacturer_id: 1 },
-              { device_id: 2, series_id: 3, manufacturer_id: 1 },
-              { device_id: 2, series_id: 4, manufacturer_id: 1 },
-              { device_id: 2, series_id: 5, manufacturer_id: 1 },
-              { device_id: 2, series_id: 6, manufacturer_id: 1 },
-              { device_id: 3, series_id: 1, manufacturer_id: 1 },
-              { device_id: 3, series_id: 2, manufacturer_id: 1 },
-              { device_id: 3, series_id: 3, manufacturer_id: 1 },
-              { device_id: 3, series_id: 4, manufacturer_id: 1 },
-              { device_id: 3, series_id: 5, manufacturer_id: 1 },
-              { device_id: 3, series_id: 6, manufacturer_id: 1 },
-              { device_id: 4, series_id: 1, manufacturer_id: 1 },
-              { device_id: 4, series_id: 2, manufacturer_id: 1 },
-              { device_id: 4, series_id: 3, manufacturer_id: 1 },
-              { device_id: 4, series_id: 4, manufacturer_id: 1 },
-              { device_id: 4, series_id: 5, manufacturer_id: 1 },
-              { device_id: 4, series_id: 6, manufacturer_id: 1 },
-              { device_id: 5, series_id: 1, manufacturer_id: 1 },
-              { device_id: 5, series_id: 2, manufacturer_id: 1 },
-              { device_id: 5, series_id: 3, manufacturer_id: 1 },
-              { device_id: 5, series_id: 4, manufacturer_id: 1 },
-              { device_id: 5, series_id: 5, manufacturer_id: 1 },
-              { device_id: 5, series_id: 6, manufacturer_id: 1 },
-              { device_id: 1, series_id: 7, manufacturer_id: 2 },
-              { device_id: 1, series_id: 8, manufacturer_id: 2 },
-              { device_id: 1, series_id: 9, manufacturer_id: 2 },
-              { device_id: 1, series_id: 10, manufacturer_id: 2 },
-              { device_id: 1, series_id: 11, manufacturer_id: 2 },
-              { device_id: 1, series_id: 12, manufacturer_id: 2 },
-              { device_id: 2, series_id: 7, manufacturer_id: 2 },
-              { device_id: 2, series_id: 8, manufacturer_id: 2 },
-              { device_id: 2, series_id: 9, manufacturer_id: 2 },
-              { device_id: 2, series_id: 10, manufacturer_id: 2 },
-              { device_id: 2, series_id: 11, manufacturer_id: 2 },
-              { device_id: 2, series_id: 12, manufacturer_id: 2 },
-              { device_id: 3, series_id: 7, manufacturer_id: 2 },
-              { device_id: 3, series_id: 8, manufacturer_id: 2 },
-              { device_id: 3, series_id: 9, manufacturer_id: 2 },
-              { device_id: 3, series_id: 10, manufacturer_id: 2 },
-              { device_id: 3, series_id: 11, manufacturer_id: 2 },
-              { device_id: 3, series_id: 12, manufacturer_id: 2 },
-              { device_id: 4, series_id: 7, manufacturer_id: 2 },
-              { device_id: 4, series_id: 8, manufacturer_id: 2 },
-              { device_id: 4, series_id: 9, manufacturer_id: 2 },
-              { device_id: 4, series_id: 10, manufacturer_id: 2 },
-              { device_id: 4, series_id: 11, manufacturer_id: 2 },
-              { device_id: 4, series_id: 12, manufacturer_id: 2 },
-              { device_id: 5, series_id: 7, manufacturer_id: 2 },
-              { device_id: 5, series_id: 8, manufacturer_id: 2 },
-              { device_id: 5, series_id: 9, manufacturer_id: 2 },
-              { device_id: 5, series_id: 10, manufacturer_id: 2 },
-              { device_id: 5, series_id: 11, manufacturer_id: 2 },
-              { device_id: 5, series_id: 12, manufacturer_id: 2 },
-              { device_id: 1, series_id: 13, manufacturer_id: 3 },
-              { device_id: 9, series_id: 14, manufacturer_id: 3 },
-              { device_id: 7, series_id: 15, manufacturer_id: 3 },
-              { device_id: 13, series_id: 16, manufacturer_id: 3 },
-              { device_id: 8, series_id: 17, manufacturer_id: 3 },
-              { device_id: 10, series_id: 17, manufacturer_id: 3 },
-              { device_id: 2, series_id: 13, manufacturer_id: 3 },
-              { device_id: 10, series_id: 14, manufacturer_id: 3 },
-              { device_id: 8, series_id: 15, manufacturer_id: 3 },
-              { device_id: 14, series_id: 16, manufacturer_id: 3 },
-              { device_id: 9, series_id: 17, manufacturer_id: 3 },
-              { device_id: 14, series_id: 17, manufacturer_id: 3 },
-              { device_id: 3, series_id: 13, manufacturer_id: 3 },
-              { device_id: 3, series_id: 14, manufacturer_id: 3 },
-              { device_id: 3, series_id: 15, manufacturer_id: 3 },
-              { device_id: 3, series_id: 16, manufacturer_id: 3 },
-              { device_id: 5, series_id: 17, manufacturer_id: 3 },
-              { device_id: 8, series_id: 16, manufacturer_id: 3 },
-              { device_id: 4, series_id: 13, manufacturer_id: 3 },
-              { device_id: 4, series_id: 14, manufacturer_id: 3 },
-              { device_id: 4, series_id: 15, manufacturer_id: 3 },
-              { device_id: 4, series_id: 16, manufacturer_id: 3 },
-              { device_id: 11, series_id: 17, manufacturer_id: 3 },
-              { device_id: 13, series_id: 17, manufacturer_id: 3 },
-              { device_id: 5, series_id: 13, manufacturer_id: 3 },
-              { device_id: 5, series_id: 14, manufacturer_id: 3 },
-              { device_id: 5, series_id: 15, manufacturer_id: 3 },
-              { device_id: 5, series_id: 16, manufacturer_id: 3 },
-              { device_id: 12, series_id: 17, manufacturer_id: 3 },
-              { device_id: 4, series_id: 17, manufacturer_id: 3 }
+            devices_amount = Models::Device.count
+            series_amount = Models::Series.count
+            manufacturers_amount = Models::Manufacturer.count
+
+            device_series = (1..devices_amount).to_a.shuffle.map do |device_id|
+              (1..series_amount).to_a.shuffle.map do |series_id|
+                (1..manufacturers_amount).to_a.shuffle.map do |manufacturer_id|
+                  {
+                    device_id: device_id,
+                    series_id: series_id,
+                    manufacturer_id: manufacturer_id
+                  }
+                end
+              end
+            end.flatten
+
+            Models::DeviceSeries.create_all(device_series)
+          end
+
+          def create_options
+            Models::Option.create_all([
+              { title: 'Цвет' }
             ])
           end
 
-        # options = Option.create([
-        #   { title: 'Цвет' }
-        # ])
+          def create_device_series_options
+            device_series_amount = Models::DeviceSeries.count
+            options_amount = Models::Option.count
 
-        # stock_keeping_units = StockKeepingUnit.create([
-        #   { title: '8150', price: rand(1..100.0) },
-        #   { title: '5550 X', price: rand(1..100.0) },
-        #   { title: '0209-507', price: rand(1..100.0) },
-        #   { title: 'N2288.1 X', price: rand(1..100.0) },
-        #   { title: 'N2271.9', price: rand(1..100.0) },
-        #   { title: '0213-507', price: rand(1..100.0) },
-        #   { title: '1803-X', price: rand(1..100.0) },
-        #   { title: '2006/6 UC-X-507', price: rand(1..100.0) },
-        #   { title: '2000/6 US', price: rand(1..100.0) },
-        #   { title: '2001/6 U-507  ', price: rand(1..100.0) },
-        #   { title: '2000/6 US-507', price: rand(1..100.0) },
-        #   { title: '2506-X-507', price: rand(1..100.0) },
-        #   { title: '1786-X', price: rand(1..100.0) },
-        #   { title: '2006/1 UCGL-X-507', price: rand(1..100.0) },
-        #   { title: '2000/1 US', price: rand(1..100.0) },
-        #   { title: '2001/6 U-507', price: rand(1..100.0) },
-        #   { title: '2000/1 US-500', price: rand(1..100.0) },
-        #   { title: '2509-X-500', price: rand(1..100.0) },
-        #   { title: '1789-X', price: rand(1..100.0) },
-        #   { title: '1786-X-507', price: rand(1..100.0) },
-        #   { title: '3916-12221', price: rand(1..100.0) },
-        #   { title: '5518G-A03449 X', price: rand(1..100.0) },
-        #   { title: '5518A-A3449 X', price: rand(1..100.0) },
-        #   { title: '5518M-A03459 X', price: rand(1..100.0) },
-        #   { title: '5518E-A03459 X', price: rand(1..100.0) },
-        #   { title: '1228.01 RJ 12-6', price: rand(1..100.0) },
-        #   { title: '5013U-A01105', price: rand(1..100.0) },
-        #   { title: '5014G-A01018 X', price: rand(1..100.0) },
-        #   { title: '5013A-A00215 X', price: rand(1..100.0) },
-        #   { title: '5014M-A00100 X', price: rand(1..100.0) },
-        #   { title: '5013E-A00215 X', price: rand(1..100.0) },
-        #   { title: '5014M-B01018  ', price: rand(1..100.0) },
-        #   { title: '3557-A01440', price: rand(1..100.0) },
-        #   { title: '3558-A01440', price: rand(1..100.0) },
-        #   { title: '3559-A01445', price: rand(1..100.0) },
-        #   { title: '3557G-A00651 X', price: rand(1..100.0) },
-        #   { title: '3558A-A651 X', price: rand(1..100.0) },
-        #   { title: '3559M-A00651 X', price: rand(1..100.0) },
-        #   { title: '3558E-A00651 X', price: rand(1..100.0) }
-        # ])
+            options_keys = [
+              { variable: "X#{rand(1..options_amount)}", value: '81', description: 'Анрацит' },
+              { variable: "X#{rand(1..options_amount)}", value: '82', description: 'Слоновая кость' },
+              { variable: "X#{rand(1..options_amount)}", value: '83', description: 'Серебро' },
+              { variable: "X#{rand(1..options_amount)}", value: '84', description: 'Белый' },
+              { variable: "X#{rand(1..options_amount)}", value: '884', description: 'Белый бархат' },
 
-        # series_options = SeriesOption.create([
-        #   { series_id: 5 , option_id: 1, value: '81', description: 'Анрацит' },
-        #   { series_id: 5 , option_id: 1, value: '82', description: 'Слоновая кость' },
-        #   { series_id: 5 , option_id: 1, value: '83', description: 'Серебро' },
-        #   { series_id: 5 , option_id: 1, value: '84', description: 'Белый' },
-        #   { series_id: 5 , option_id: 1, value: '884', description: 'Белый бархат' },
+              { variable: "X#{rand(1..options_amount)}", value: 'В', description: 'Белый' },
+              { variable: "X#{rand(1..options_amount)}", value: 'С', description: 'Слоновая кость' },
+              { variable: "X#{rand(1..options_amount)}", value: 'D', description: 'Бежевый' },
+              { variable: "X#{rand(1..options_amount)}", value: 'S', description: 'Серый' },
+              { variable: "X#{rand(1..options_amount)}", value: 'R', description: 'Бордовый' },
+              { variable: "X#{rand(1..options_amount)}", value: 'M2', description: 'Голубой' },
+              { variable: "X#{rand(1..options_amount)}", value: 'R2', description: 'Кирпичный' },
+              { variable: "X#{rand(1..options_amount)}", value: 'S2', description: 'Дымчатый' },
+              { variable: "X#{rand(1..options_amount)}", value: 'H', description: 'Табако' },
+              { variable: "X#{rand(1..options_amount)}", value: 'N', description: 'Черный' }
+            ]
 
-        #   { series_id: 2, option_id: 1, value: 'В', description: 'белый' },
-        #   { series_id: 2, option_id: 1, value: 'С', description: 'слоновая кость' },
-        #   { series_id: 2, option_id: 1, value: 'D', description: 'бежевый' },
-        #   { series_id: 2, option_id: 1, value: 'S', description: 'серый' },
-        #   { series_id: 2, option_id: 1, value: 'R', description: 'бордовый' },
-        #   { series_id: 2, option_id: 1, value: 'M2', description: 'голубой' },
-        #   { series_id: 2, option_id: 1, value: 'R2', description: 'кирпичный' },
-        #   { series_id: 2, option_id: 1, value: 'S2', description: 'дымчатый' },
-        #   { series_id: 2, option_id: 1, value: 'H', description: 'табако' },
-        #   { series_id: 2, option_id: 1, value: 'N', description: 'черный' }
-        # ])
+            device_series_options = (1..device_series_amount).to_a.shuffle.map do |device_series|
+              (1..options_amount * options_keys.size).to_a.shuffle.map do |option|
+                option_key = options_keys.at(option)
 
-        # device_skus = DeviceSku.create([
-        #   { device_series_id: 65, stock_keeping_units_id: 3, amount: 2 },
-        #   { device_series_id: 65, stock_keeping_units_id: 22, amount: 2 },
-        #   { device_series_id: 65, stock_keeping_units_id: 4, amount: 1 },
-        #   { device_series_id: 65, stock_keeping_units_id: 5, amount: 1 }
-        # ])
+                {
+                  device_series_id: device_series,
+                  option_id: rand(1..options_amount),
+                  variable: option_key[:variable],
+                  value: option_key[:value],
+                  description: option_key[:description]
+                }
+              end
+            end.flatten
+
+            Models::DeviceSeriesOption.create_all(device_series_options)
+          end
+
+          def create_tags
+            Models::Tag.create_all([
+              { title: 'Классический дизайн' },
+              { title: 'Натуральные материалы' }
+            ])
+          end
+
+          def create_device_series_taggings
+            tags_amount = Models::Tag.count
+            device_series_amount = Models::DeviceSeries.count
+
+            device_series_taggings = (1..device_series_amount).to_a.shuffle.map do |device_series|
+              (1..tags_amount).to_a.shuffle.map do |tag|
+                {
+                  tag_id: tag,
+                  device_series_id: device_series
+                }
+              end
+            end.flatten
+
+            Models::DeviceSeriesTagging.create_all(device_series_taggings)
+          end
+
+          def create_stock_keeping_units
+            options_amount = Models::Option.count
+
+            stock_keeping_units = [
+              { title: "8150", price: rand(1..100.0) },
+              { title: "5550 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "0209-507", price: rand(1..100.0) },
+              { title: "N2288.1 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "N2271.9", price: rand(1..100.0) },
+              { title: "0213-507", price: rand(1..100.0) },
+              { title: "1803-X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "2006/6 UC-X#{rand(1..options_amount)}-507", price: rand(1..100.0) },
+              { title: "2000/6 US", price: rand(1..100.0) },
+              { title: "2001/6 U-507  ", price: rand(1..100.0) },
+              { title: "2000/6 US-507", price: rand(1..100.0) },
+              { title: "2506-X#{rand(1..options_amount)}-507", price: rand(1..100.0) },
+              { title: "1786-X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "2006/1 UCGL-X#{rand(1..options_amount)}-507", price: rand(1..100.0) },
+              { title: "2000/1 US", price: rand(1..100.0) },
+              { title: "2001/6 U-507", price: rand(1..100.0) },
+              { title: "2000/1 US-500", price: rand(1..100.0) },
+              { title: "2509-X#{rand(1..options_amount)}-500", price: rand(1..100.0) },
+              { title: "1789-X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "1786-X#{rand(1..options_amount)}-507", price: rand(1..100.0) },
+              { title: "3916-12221", price: rand(1..100.0) },
+              { title: "5518G-A03449 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "5518A-A3449 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "5518M-A03459 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "5518E-A03459 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "1228.01 RJ 12-6", price: rand(1..100.0) },
+              { title: "5013U-A01105", price: rand(1..100.0) },
+              { title: "5014G-A01018 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "5013A-A00215 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "5014M-A00100 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "5013E-A00215 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "5014M-B01018", price: rand(1..100.0) },
+              { title: "3557-A01440", price: rand(1..100.0) },
+              { title: "3558-A01440", price: rand(1..100.0) },
+              { title: "3559-A01445", price: rand(1..100.0) },
+              { title: "3557G-A00651 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "3558A-A651 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "3559M-A00651 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "3558E-A00651 X#{rand(1..options_amount)}", price: rand(1..100.0) },
+              { title: "2516-3-507", price: rand(1..100.0) }
+            ]
+
+            Models::StockKeepingUnit.create_all(stock_keeping_units)
+          end
+
+          def create_device_series_stock_keeping_units
+            device_series_amount = Models::DeviceSeries.count
+            stock_keeping_units_amount = Models::StockKeepingUnit.count
+
+            (1..device_series_amount).to_a.shuffle.map do |device_series|
+              stock_keeping_units = (1..stock_keeping_units_amount).to_a.shuffle
+
+              device_series_stock_keeping_units = (1..rand(1..4)).to_a.shuffle.map do |amount|
+                stock_keeping_unit = stock_keeping_units.delete(stock_keeping_units.sample)
+
+                {
+                  device_series_id: device_series,
+                  stock_keeping_unit_id: stock_keeping_unit,
+                  amount: amount
+                }
+              end
+
+              Models::DeviceSeriesStockKeepingUnit.create_all(device_series_stock_keeping_units)
+            end
+          end
       end
     end
   end

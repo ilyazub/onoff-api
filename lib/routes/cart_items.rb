@@ -1,7 +1,3 @@
-require_relative '../models/cart_item'
-require_relative '../models/device'
-require_relative '../models/series'
-
 module OnOff
   module API
     class CartItems < Grape::API

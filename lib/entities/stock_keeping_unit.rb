@@ -3,10 +3,10 @@ require_relative './base'
 module OnOff
   module API
     module Entities
-      class Device < Base
+      class StockKeepingUnit < Base
         expose :id
         expose :title, documentation: { type: 'String' }
-        expose :device_group_id
+        expose :price, documentation: { type: 'Float' }
       end
     end
   end

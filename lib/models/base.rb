@@ -1,4 +1,5 @@
 require 'dm-timestamps'
+require 'dm-constraints'
 
 require_relative '../../config/database'
 
@@ -7,11 +8,9 @@ module OnOff
     module Models
       class Base
         def self.create_all(list)
-          list.each do |item|
-            self.create item
+          list.map do |item|
+            create item
           end
-
-          self.all
         end
       end
     end

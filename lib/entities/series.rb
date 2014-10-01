@@ -4,6 +4,7 @@ module OnOff
   module API
     module Entities
       class Series < Base
+        expose :id
         expose :title, documentation: { type: 'String' }
       end
     end

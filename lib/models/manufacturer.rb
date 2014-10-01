@@ -1,4 +1,6 @@
 require_relative './device_series'
+require_relative './series'
+require_relative './device'
 
 require_relative '../entities/manufacturer'
 

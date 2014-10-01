@@ -1,5 +1,3 @@
-require_relative '../models/device'
-
 module OnOff
   module API
     class Devices < Grape::API
