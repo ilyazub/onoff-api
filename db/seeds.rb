@@ -85,7 +85,7 @@ module OnOff
 
           def create_manufacturers
             manufacturers = Models::Manufacturer.create_all([
-              { title: 'Busch Jaeger', assembly: 'ABB', country: 'Германия' }
+              { assembly: 'Busch Jaeger', title: 'ABB', country: 'Германия' }
             ])
           end
 
