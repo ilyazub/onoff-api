@@ -12,7 +12,7 @@ module OnOff
           requires :id, type: String, desc: 'UUID of the cart'
         end
         put ':id' do
-          present Models::Cart.first_or_create({}, id: params[:id])
+          present Models::Cart.first_or_create({ id: params[:id] }, {})
         end
       end
     end
