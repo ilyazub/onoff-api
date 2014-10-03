@@ -1,5 +1,5 @@
-require_relative './device_series'
-require_relative './option'
+require_relative './device_series_marking'
+require_relative './device_series_option_value'
 
 require_relative '../entities/device_series_option'
 
@@ -9,12 +9,13 @@ module OnOff
       class DeviceSeriesOption < Base
         include DataMapper::Resource
 
+        property :id, Serial, key: true, required: true
         property :variable, String, required: true
-        property :value, String, required: true
         property :description, String, required: true
 
-        belongs_to :device_series, 'DeviceSeries', key: true
-        belongs_to :option, key: true
+        belongs_to :device_series, 'DeviceSeries'
+
+        has n, :values, 'DeviceSeriesOptionValue', child_key: [ :option_id ], constraint: :destroy
 
         timestamps :at
 

@@ -15,7 +15,7 @@ module OnOff
         property :country, String, required: true
         property :assembly, String, required: true
 
-        has n, :device_series
+        has n, :device_series, constraint: :destroy
         has n, :series, through: :device_series
         has n, :devices, through: :device_series
 

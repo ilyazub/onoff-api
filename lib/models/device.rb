@@ -18,10 +18,10 @@ module OnOff
 
         belongs_to :device_group
 
-        has n, :cart_items
+        has n, :cart_items, constraint: :destroy
         has n, :carts, through: :cart_items
 
-        has n, :device_series
+        has n, :device_series, constraint: :destroy
         has n, :series, through: :device_series
         has n, :manufacturers, through: :device_series
 

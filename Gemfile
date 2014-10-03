@@ -10,5 +10,5 @@ gem 'grape-entity'
 group :development, :test do
   gem 'pry'
   gem 'pry-byebug'
-  gem 'parallel'
+  gem 'pry-stack_explorer'
 end

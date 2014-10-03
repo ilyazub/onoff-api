@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgres
+  encoding: UTF8
+  host: localhost
+  port: 5432
+  username: onoff
+  password: onoff
+  pool: 5
+  collation: uk_UA.UTF-8
+  ctype: uk_UA.UTF-8
+  template: template1
+
+development:
+  <<: *default
+  database: onoff_development
+
+test: &test
+  <<: *default
+  database: onoff_test
+
+production:
+  <<: *default
+  database: onoff_production
+  password: <%= ENV['ONOFF_API_DATABASE_PASSWORD'] %>

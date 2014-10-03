@@ -9,7 +9,7 @@ module OnOff
       class DeviceSeriesTagging < Base
         include DataMapper::Resource
 
-        belongs_to :tag, key: true
+        belongs_to :tag, parent_key: [ :title ], key: true
         belongs_to :device_series, key: true
 
         timestamps :at

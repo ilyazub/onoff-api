@@ -9,10 +9,9 @@ module OnOff
       class Tag < Base
         include DataMapper::Resource
 
-        property :id, Serial, key: true, required: true
-        property :title, String, required: true, unique_index: true
+        property :title, String, required: true, key: true
 
-        has n, :device_series_taggings
+        has n, :device_series_taggings, child_key: [ :tag, :device_series_id ], constraint: :destroy
         has n, :device_series, through: :device_series_taggings
 
         timestamps :at
