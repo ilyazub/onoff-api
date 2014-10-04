@@ -1,7 +1,7 @@
 require_relative './device_series'
 require_relative './marking'
-require_relative './device_series_option'
-require_relative './device_series_option_value'
+require_relative './device_series_parameter'
+require_relative './device_series_parameter_value'
 
 require_relative '../entities/device_series_marking'
 
@@ -17,8 +17,8 @@ module OnOff
         belongs_to :device_series, 'DeviceSeries'
         belongs_to :marking, parent_key: [ :title ]
 
-        has n, :options, 'DeviceSeriesOption', through: :device_series
-        has n, :values, 'DeviceSeriesOptionValue', through: :options
+        has n, :parameters, 'DeviceSeriesParameter', through: :device_series
+        has n, :values, 'DeviceSeriesParameterValue', through: :parameters
 
         timestamps :at
 

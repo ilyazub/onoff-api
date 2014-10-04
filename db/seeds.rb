@@ -16,8 +16,8 @@ module OnOff
           create_manufacturers
 
           create_device_series
-          create_device_series_options
-          create_device_series_option_values
+          create_device_series_parameters
+          create_device_series_parameter_values
 
           create_markings
           create_device_series_markings
@@ -44,7 +44,7 @@ module OnOff
             switches      = device_groups.first(title: 'Выключатель')
             dimmers       = device_groups.first(title: 'Диммер')
             frames        = device_groups.first(title: 'Рамка')
-            first_option  = device_groups.first(title: 'Опция 1')
+            first_parameter  = device_groups.first(title: 'Опция 1')
 
             Models::Device.create_all([
               { title: 'Розетка', device_group: jacks },
@@ -61,7 +61,7 @@ module OnOff
               { title: 'Рамка 3-ая', device_group: frames },
               { title: 'Рамка 4-ая', device_group: frames },
               { title: 'Рамка 5-ая', device_group: frames },
-              # { title: 'Декоративная накладка', device_group: first_option }
+              # { title: 'Декоративная накладка', device_group: first_parameter }
             ])
           end
 
@@ -106,29 +106,29 @@ module OnOff
             Models::DeviceSeries.create_all(device_series)
           end
 
-          def create_device_series_options
+          def create_device_series_parameters
             device_series_amount = Models::DeviceSeries.count
 
-            options = [
+            parameters = [
               { variable: "X1", description: 'Цвет' },
               { variable: "X2", description: 'Цвет' }
             ]
 
             (1..device_series_amount).to_a.shuffle.map do |device_series_id|
-              device_series_options = options.shuffle.map do |option|
+              device_series_parameters = parameters.shuffle.map do |parameter|
                 {
                   device_series_id: device_series_id,
-                  variable: option[:variable],
-                  description: option[:description]
+                  variable: parameter[:variable],
+                  description: parameter[:description]
                 }
               end
 
-              Models::DeviceSeriesOption.create_all(device_series_options)
+              Models::DeviceSeriesParameter.create_all(device_series_parameters)
             end
           end
 
-          def create_device_series_option_values
-            device_series_options_amount = Models::DeviceSeriesOption.count
+          def create_device_series_parameter_values
+            device_series_parameters_amount = Models::DeviceSeriesParameter.count
 
             values = [
               { code: '81', description: 'Анрацит' },
@@ -148,62 +148,62 @@ module OnOff
               { code: 'N', description: 'Черный' }
             ]
 
-            (1..device_series_options_amount).to_a.shuffle.map do |device_series_option_id|
-              device_series_option_values = values.shuffle.map do |value|
+            (1..device_series_parameters_amount).to_a.shuffle.map do |device_series_parameter_id|
+              device_series_parameter_values = values.shuffle.map do |value|
                 {
-                  option_id: device_series_option_id,
+                  parameter_id: device_series_parameter_id,
                   code: value[:code],
                   description: value[:description]
                 }
               end
 
-              Models::DeviceSeriesOptionValue.create_all(device_series_option_values)
+              Models::DeviceSeriesParameterValue.create_all(device_series_parameter_values)
             end
           end
 
           def create_markings
-            device_series_options_amount = Models::DeviceSeriesOption.distinct(:variable).to_a.count
+            device_series_parameters_amount = Models::DeviceSeriesParameter.distinct(:variable).to_a.count
 
             markings = [
               { title: "8150", price: rand(1..100.0) },
-              { title: "5550 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
+              { title: "5550 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
               { title: "0209-507", price: rand(1..100.0) },
-              { title: "N2288.1 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
+              { title: "N2288.1 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
               { title: "N2271.9", price: rand(1..100.0) },
               { title: "0213-507", price: rand(1..100.0) },
-              { title: "1803-X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "2006/6 UC-X#{rand(1..device_series_options_amount)}-507", price: rand(1..100.0) },
+              { title: "1803-X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "2006/6 UC-X#{rand(1..device_series_parameters_amount)}-507", price: rand(1..100.0) },
               { title: "2000/6 US", price: rand(1..100.0) },
               { title: "2001/6 U-507  ", price: rand(1..100.0) },
               { title: "2000/6 US-507", price: rand(1..100.0) },
-              { title: "2506-X#{rand(1..device_series_options_amount)}-507", price: rand(1..100.0) },
-              { title: "1786-X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "2006/1 UCGL-X#{rand(1..device_series_options_amount)}-507", price: rand(1..100.0) },
+              { title: "2506-X#{rand(1..device_series_parameters_amount)}-507", price: rand(1..100.0) },
+              { title: "1786-X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "2006/1 UCGL-X#{rand(1..device_series_parameters_amount)}-507", price: rand(1..100.0) },
               { title: "2000/1 US", price: rand(1..100.0) },
               { title: "2001/6 U-507", price: rand(1..100.0) },
               { title: "2000/1 US-500", price: rand(1..100.0) },
-              { title: "2509-X#{rand(1..device_series_options_amount)}-500", price: rand(1..100.0) },
-              { title: "1789-X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "1786-X#{rand(1..device_series_options_amount)}-507", price: rand(1..100.0) },
+              { title: "2509-X#{rand(1..device_series_parameters_amount)}-500", price: rand(1..100.0) },
+              { title: "1789-X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "1786-X#{rand(1..device_series_parameters_amount)}-507", price: rand(1..100.0) },
               { title: "3916-12221", price: rand(1..100.0) },
-              { title: "5518G-A03449 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "5518A-A3449 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "5518M-A03459 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "5518E-A03459 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
+              { title: "5518G-A03449 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "5518A-A3449 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "5518M-A03459 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "5518E-A03459 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
               { title: "1228.01 RJ 12-6", price: rand(1..100.0) },
               { title: "5013U-A01105", price: rand(1..100.0) },
-              { title: "5014G-A01018 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "5013A-A00215 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "5014M-A00100 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "5013E-A00215 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
+              { title: "5014G-A01018 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "5013A-A00215 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "5014M-A00100 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "5013E-A00215 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
               { title: "5014M-B01018", price: rand(1..100.0) },
               { title: "3557-A01440", price: rand(1..100.0) },
               { title: "3558-A01440", price: rand(1..100.0) },
               { title: "3559-A01445", price: rand(1..100.0) },
-              { title: "3557G-A00651 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "3558A-A651 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "3559M-A00651 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
-              { title: "3558E-A00651 X#{rand(1..device_series_options_amount)}", price: rand(1..100.0) },
+              { title: "3557G-A00651 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "3558A-A651 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "3559M-A00651 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
+              { title: "3558E-A00651 X#{rand(1..device_series_parameters_amount)}", price: rand(1..100.0) },
               { title: "2516-3-507", price: rand(1..100.0) }
             ]
 

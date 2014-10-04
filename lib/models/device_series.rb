@@ -8,8 +8,8 @@ require_relative './marking'
 require_relative './tag'
 
 require_relative './device_series_marking'
-require_relative './device_series_option'
-require_relative './device_series_option_value'
+require_relative './device_series_parameter'
+require_relative './device_series_parameter_value'
 
 require_relative './device_series_tagging'
 
@@ -33,14 +33,14 @@ module OnOff
 
         has n, :cart_items, through: :device
 
-        has n, :options, 'DeviceSeriesOption', constraint: :destroy
-        has n, :values, 'DeviceSeriesOptionValue', through: :options
+        has n, :parameters, 'DeviceSeriesParameter', constraint: :destroy
+        has n, :values, 'DeviceSeriesParameterValue', through: :parameters, constraint: :destroy
 
         has n, :device_series_markings, 'DeviceSeriesMarking', constraint: :destroy
-        has n, :markings, through: :device_series_markings
+        has n, :markings, through: :device_series_markings, constraint: :destroy
 
         has n, :device_series_taggings, constraint: :destroy
-        has n, :tags, through: :device_series_taggings
+        has n, :tags, through: :device_series_taggings, constraint: :destroy
 
         timestamps :at
 

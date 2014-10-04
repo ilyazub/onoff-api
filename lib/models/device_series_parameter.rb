@@ -1,12 +1,12 @@
 require_relative './device_series_marking'
-require_relative './device_series_option_value'
+require_relative './device_series_parameter_value'
 
-require_relative '../entities/device_series_option'
+require_relative '../entities/device_series_parameter'
 
 module OnOff
   module API
     module Models
-      class DeviceSeriesOption < Base
+      class DeviceSeriesParameter < Base
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
@@ -15,11 +15,11 @@ module OnOff
 
         belongs_to :device_series, 'DeviceSeries'
 
-        has n, :values, 'DeviceSeriesOptionValue', child_key: [ :option_id ], constraint: :destroy
+        has n, :values, 'DeviceSeriesParameterValue', child_key: [ :parameter_id ], constraint: :destroy
 
         timestamps :at
 
-        Entity = Entities::DeviceSeriesOption
+        Entity = Entities::DeviceSeriesParameter
       end
     end
   end

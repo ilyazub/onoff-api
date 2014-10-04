@@ -3,8 +3,8 @@ require_relative './base'
 require_relative './device_series'
 require_relative './marking'
 
-require_relative './device_series_option'
-require_relative './device_series_option_value'
+require_relative './device_series_parameter'
+require_relative './device_series_parameter_value'
 
 module OnOff
   module API
@@ -12,8 +12,8 @@ module OnOff
       class DeviceSeriesMarking < Base
         expose :amount
         expose :marking, using: Marking
-        expose :options, using: DeviceSeriesOption do |marking, options|
-          marking.options
+        expose :parameters, using: DeviceSeriesParameter do |marking, options|
+          marking.parameters
         end
       end
     end
