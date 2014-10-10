@@ -5,7 +5,7 @@ require_relative './device_series'
 module OnOff
   module API
     module Entities
-      class DeviceSeriesTagging < Base
+      class Tagging < Base
         expose :tag_id, :device_series_id
       end
     end

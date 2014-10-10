@@ -1,12 +1,12 @@
 require_relative './tag'
 require_relative './device_series'
 
-require_relative '../entities/device_series_tagging'
+require_relative '../entities/tagging'
 
 module OnOff
   module API
     module Models
-      class DeviceSeriesTagging < Base
+      class Tagging < Base
         include DataMapper::Resource
 
         belongs_to :tag, parent_key: [ :title ], key: true
@@ -14,7 +14,7 @@ module OnOff
 
         timestamps :at
 
-        Entity = Entities::DeviceSeriesTagging
+        Entity = Entities::Tagging
       end
     end
   end

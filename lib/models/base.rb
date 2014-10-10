@@ -5,7 +5,7 @@ module OnOff
   module API
     module Models
       class Base
-        def self.create_all(list)
+        def self.bulk_create(list)
           list.map do |item|
             create item
           end

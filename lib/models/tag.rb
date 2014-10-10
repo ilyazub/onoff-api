@@ -1,4 +1,4 @@
-require_relative './device_series_tagging'
+require_relative './tagging'
 require_relative './device_series'
 
 require_relative '../entities/tag'
@@ -11,8 +11,8 @@ module OnOff
 
         property :title, String, required: true, key: true
 
-        has n, :device_series_taggings, child_key: [ :tag, :device_series_id ], constraint: :destroy
-        has n, :device_series, through: :device_series_taggings
+        has n, :taggings, child_key: [ :tag, :device_series_id ], constraint: :destroy
+        has n, :device_series, through: :taggings
 
         timestamps :at
 

@@ -1,5 +1,5 @@
 require_relative './base'
-require_relative './device_with_device_series'
+require_relative './device'
 
 module OnOff
   module API
@@ -7,7 +7,7 @@ module OnOff
       class CartItem < Base
         expose :id
         expose :amount, documentation: { type: 'Integer' }
-        expose :device, using: DeviceWithDeviceSeries
+        expose :device, using: Device
       end
     end
   end

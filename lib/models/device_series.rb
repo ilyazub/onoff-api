@@ -4,14 +4,14 @@ require_relative './device'
 require_relative './series'
 require_relative './manufacturer'
 
-require_relative './marking'
+require_relative './sku'
 require_relative './tag'
 
-require_relative './device_series_marking'
-require_relative './device_series_parameter'
-require_relative './device_series_parameter_value'
+require_relative './device_series_sku'
+require_relative './parameter'
+require_relative './parameter_value'
 
-require_relative './device_series_tagging'
+require_relative './tagging'
 
 require_relative '../entities/device_series'
 
@@ -33,14 +33,14 @@ module OnOff
 
         has n, :cart_items, through: :device
 
-        has n, :parameters, 'DeviceSeriesParameter', constraint: :destroy
-        has n, :values, 'DeviceSeriesParameterValue', through: :parameters, constraint: :destroy
+        has n, :parameters, 'Parameter', constraint: :destroy
+        has n, :values, 'ParameterValue', through: :parameters
 
-        has n, :device_series_markings, 'DeviceSeriesMarking', constraint: :destroy
-        has n, :markings, through: :device_series_markings, constraint: :destroy
+        has n, :device_series_skus, 'DeviceSeriesSKU', constraint: :destroy
+        has n, :skus, 'SKU', through: :device_series_skus
 
-        has n, :device_series_taggings, constraint: :destroy
-        has n, :tags, through: :device_series_taggings, constraint: :destroy
+        has n, :taggings, constraint: :destroy
+        has n, :tags, through: :taggings
 
         timestamps :at
 

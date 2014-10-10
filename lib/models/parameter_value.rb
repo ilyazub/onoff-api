@@ -1,22 +1,22 @@
-require_relative './device_series_parameter'
+require_relative './parameter'
 
-require_relative '../entities/device_series_parameter_value'
+require_relative '../entities/parameter_value'
 
 module OnOff
   module API
     module Models
-      class DeviceSeriesParameterValue < Base
+      class ParameterValue < Base
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
         property :code, String, required: true
         property :description, String, required: true
 
-        belongs_to :parameter, 'DeviceSeriesParameter'
+        belongs_to :parameter, 'Parameter'
 
         timestamps :at
 
-        Entity = Entities::DeviceSeriesParameterValue
+        Entity = Entities::ParameterValue
       end
     end
   end

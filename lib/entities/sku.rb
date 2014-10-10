@@ -3,9 +3,10 @@ require_relative './base'
 module OnOff
   module API
     module Entities
-      class Marking < Base
+      class SKU < Base
+        expose :id, documentation: { type: 'Integer' }
         expose :title, documentation: { type: 'String' }
-        expose :price, documentation: { type: 'Float' }
+        expose :unit_price, documentation: { type: 'Float' }
       end
     end
   end

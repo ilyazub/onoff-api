@@ -22,7 +22,14 @@ module OnOff
               requires :id, type: Integer
             end
             put ':id' do
-              present Models::CartItem.get(params[:id]).update(amount: params[:amount])
+              cart_item = Models::CartItem.get(params[:id])
+
+              if cart_item.update(amount: params[:amount])
+                present cart_item
+              else
+                status 400
+                present cart_item.errors
+              end
             end
 
             desc 'Deletes cart item'
@@ -30,14 +37,14 @@ module OnOff
               requires :id, type: Integer
             end
             delete ':id' do
-              present Models::CartItem.get(params[:id]).destroy
-            end
-          end
+              cart_item = Models::CartItem.get(params[:id])
 
-          resource :series do
-            desc 'Get all series of devices in cart'
-            get do
-              present Models::Cart.get(params[:cart_id]).devices.series
+              if cart_item.destroy
+                present cart_item
+              else
+                status 400
+                present cart_item.errors
+              end
             end
           end
         end

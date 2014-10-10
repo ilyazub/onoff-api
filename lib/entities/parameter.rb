@@ -1,17 +1,16 @@
 require_relative './base'
 
 require_relative './device_series'
-require_relative './device_series_parameter_value'
+require_relative './parameter_value'
 
 module OnOff
   module API
     module Entities
-      class DeviceSeriesParameter < Base
+      class Parameter < Base
         expose :id
         expose :variable, :description, documentation: { type: 'String' }
 
-        expose :device_series_id
-        expose :values, using: DeviceSeriesParameterValue
+        expose :values, using: ParameterValue
       end
     end
   end
