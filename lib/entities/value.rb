@@ -6,6 +6,7 @@ module OnOff
       class Value < Base
         expose :id, documentation: { type: 'Integer' }
         expose :code, :description, documentation: { type: 'String' }
+        expose :unit_price, documentation: { type: 'Float' }
       end
     end
   end

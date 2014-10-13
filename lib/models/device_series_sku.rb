@@ -12,6 +12,7 @@ module OnOff
 
         property :id, Serial, required: true, key: true
         property :amount, Integer, required: true, default: 1
+        property :layer, Integer, required: true, default: 1
 
         belongs_to :sku, 'SKU'
         belongs_to :device_series, 'DeviceSeries'

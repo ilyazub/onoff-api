@@ -8,7 +8,7 @@ module OnOff
   module API
     module Entities
       class DeviceSeriesSKU < Base
-        expose :amount
+        expose :amount, :layer
 
         expose :sku, using: SKU
         expose :parameters, using: Parameter

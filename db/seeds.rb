@@ -168,14 +168,15 @@ module OnOff
             (1..device_series_amount).to_a.shuffle.map do |device_series_id|
               skus_dup = skus.dup
 
-              device_series_skus = (1..rand(1..4)).to_a.shuffle.map do |amount|
+              device_series_skus = (1..rand(1..4)).to_a.shuffle.map.with_index do |amount, layer|
                 sku_id = skus_dup.sample
                 skus_dup -= [sku_id]
 
                 {
                   device_series_id: device_series_id,
                   sku_id: sku_id,
-                  amount: amount
+                  amount: amount,
+                  layer: layer
                 }
               end
 
@@ -227,7 +228,8 @@ module OnOff
                 {
                   parameter_id: parameter_id,
                   code: value[:code],
-                  description: value[:description]
+                  description: value[:description],
+                  unit_price: rand(1..100.0)
                 }
               end
 
