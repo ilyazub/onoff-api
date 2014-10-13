@@ -9,4 +9,6 @@ use Rack::Cors do
   end
 end
 
+use Rack::Deflater
+
 run OnOff::API::Routes::Main

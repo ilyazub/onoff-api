@@ -1,6 +1,5 @@
 require_relative './sku'
 require_relative './device_series'
-require_relative './sku_parameter'
 require_relative './parameter'
 
 require_relative '../entities/device_series_sku'
@@ -17,8 +16,8 @@ module OnOff
         belongs_to :sku, 'SKU'
         belongs_to :device_series, 'DeviceSeries'
 
-        has n, :sku_parameters, 'SKUParameter', constraint: :destroy
-        has n, :parameters, 'Parameter', through: :sku_parameters
+        has n, :parameters, constraint: :destroy
+        has n, :values, through: :parameters
 
         timestamps :at
 

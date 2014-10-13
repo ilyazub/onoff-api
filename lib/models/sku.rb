@@ -1,7 +1,7 @@
 require_relative './base'
 
 require_relative './device_series_sku'
-require_relative './sku_parameter'
+require_relative './parameter'
 require_relative './device_series'
 
 require_relative '../entities/sku'
@@ -17,7 +17,7 @@ module OnOff
         property :unit_price, Float, required: true, default: 0.0
 
         has n, :device_series_skus, 'DeviceSeriesSKU', constraint: :destroy
-        has n, :sku_parameters, 'SKUParameter', through: :device_series_skus
+        has n, :parameters, 'Parameter', through: :device_series_skus
         has n, :device_series, 'DeviceSeries', through: :device_series_skus
 
         timestamps :at

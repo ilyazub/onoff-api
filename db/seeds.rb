@@ -25,7 +25,7 @@ module OnOff
           create_device_series_skus
 
           create_parameters
-          create_parameter_values
+          create_values
 
           # create_sku_parameters
 
@@ -135,6 +135,7 @@ module OnOff
               { title: "2509-#{@variable_pattern}-500", unit_price: rand(1..100.0) },
               { title: "1789-#{@variable_pattern}", unit_price: rand(1..100.0) },
               { title: "1786-#{@variable_pattern}-507", unit_price: rand(1..100.0) },
+              { title: "1721-#{@variable_pattern}", unit_price: rand(1..100.0) },
               { title: "3916-12221", unit_price: rand(1..100.0) },
               { title: "5518G-A03449 #{@variable_pattern}", unit_price: rand(1..100.0) },
               { title: "5518A-A3449 #{@variable_pattern}", unit_price: rand(1..100.0) },
@@ -185,7 +186,7 @@ module OnOff
           def create_parameters
             skus = Models::SKU.all(:title.like => "%#{@variable_pattern}%")
 
-            variables = ('V'..'Z').to_a
+            variables = ('X'..'Z').to_a
             descriptions = %w(Цвет Форма Вкус Запах)
             skus.map do |sku|
               variable = "#{variables.sample}#{rand(1..3)}"
@@ -193,40 +194,36 @@ module OnOff
               sku.update(title: title)
 
               description = descriptions.sample
-              sku.device_series.map do |device_series|
-                parameter = device_series.parameters.first_or_create({ variable: variable }, { variable: variable, description: description })
-                sku.device_series_skus.each do |device_series_sku|
-                  device_series_sku.sku_parameters.create(parameter: parameter)
-                end
+              sku.device_series_skus.map do |device_series_sku|
+                device_series_sku.parameters.first_or_create({ variable: variable }, { description: description })
               end
 
-              sku.sku_parameters
+              sku.parameters
             end
           end
 
-          def create_parameter_values
+          def create_values
             parameters_amount = Models::Parameter.count
 
-            values = [
-              { code: '81', description: 'Анрацит' },
-              { code: '82', description: 'Слоновая кость' },
-              { code: '83', description: 'Серебро' },
-              { code: '84', description: 'Белый' },
-              { code: '884', description: 'Белый бархат' },
-              { code: 'В', description: 'Белый' },
-              { code: 'С', description: 'Слоновая кость' },
-              { code: 'D', description: 'Бежевый' },
-              { code: 'S', description: 'Серый' },
-              { code: 'R', description: 'Бордовый' },
-              { code: 'M2', description: 'Голубой' },
-              { code: 'R2', description: 'Кирпичный' },
-              { code: 'S2', description: 'Дымчатый' },
-              { code: 'H', description: 'Табако' },
-              { code: 'N', description: 'Черный' }
+            value_hashes = [
+              { code: '280', description: 'Анрацит' },
+              { code: '281', description: 'Слоновая кость' },
+              { code: '284', description: 'Серебро' },
+              { code: '285', description: 'Белый' },
+              { code: '286', description: 'Белый бархат' },
+              { code: '287', description: 'Белый бархат' },
+              { code: '288', description: 'Белый' },
+              { code: '291', description: 'Слоновая кость' },
+              { code: '295', description: 'Бежевый' },
+              { code: '296', description: 'Серый' },
+              { code: '297', description: 'Бордовый' },
+              { code: '299', description: 'Голубой' },
+              { code: '84',  description: 'Кирпичный' },
+              { code: '896', description: 'Дымчатый' }
             ]
 
             (1..parameters_amount).to_a.shuffle.map do |parameter_id|
-              parameter_values = values.shuffle.map do |value|
+              values = value_hashes.sample(rand(1..value_hashes.size)).map do |value|
                 {
                   parameter_id: parameter_id,
                   code: value[:code],
@@ -234,7 +231,7 @@ module OnOff
                 }
               end
 
-              Models::ParameterValue.bulk_create(parameter_values)
+              Models::Value.bulk_create(values)
             end
           end
 

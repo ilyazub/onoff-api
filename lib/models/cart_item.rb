@@ -20,13 +20,6 @@ module OnOff
         timestamps :at
 
         Entity = Entities::CartItem
-
-        def self.create_or_update(attributes)
-          first_or_create(attributes.slice(:device_id, :cart_id))
-          update(amount: amount + attributes[:amount].to_i)
-
-          self
-        end
       end
     end
   end

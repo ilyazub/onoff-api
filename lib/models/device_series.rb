@@ -9,7 +9,7 @@ require_relative './tag'
 
 require_relative './device_series_sku'
 require_relative './parameter'
-require_relative './parameter_value'
+require_relative './value'
 
 require_relative './tagging'
 
@@ -33,11 +33,10 @@ module OnOff
 
         has n, :cart_items, through: :device
 
-        has n, :parameters, 'Parameter', constraint: :destroy
-        has n, :values, 'ParameterValue', through: :parameters
-
         has n, :device_series_skus, 'DeviceSeriesSKU', constraint: :destroy
         has n, :skus, 'SKU', through: :device_series_skus
+        has n, :parameters, 'Parameter', through: :device_series_skus
+        has n, :values, 'Value', through: :parameters
 
         has n, :taggings, constraint: :destroy
         has n, :tags, through: :taggings

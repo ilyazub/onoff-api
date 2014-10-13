@@ -1,7 +1,7 @@
 require_relative './base'
 
 require_relative './device_series'
-require_relative './parameter_value'
+require_relative './value'
 
 module OnOff
   module API
@@ -10,7 +10,7 @@ module OnOff
         expose :id
         expose :variable, :description, documentation: { type: 'String' }
 
-        expose :values, using: ParameterValue
+        expose :values, using: Value
       end
     end
   end

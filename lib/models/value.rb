@@ -1,11 +1,11 @@
 require_relative './parameter'
 
-require_relative '../entities/parameter_value'
+require_relative '../entities/value'
 
 module OnOff
   module API
     module Models
-      class ParameterValue < Base
+      class Value < Base
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
@@ -16,7 +16,7 @@ module OnOff
 
         timestamps :at
 
-        Entity = Entities::ParameterValue
+        Entity = Entities::Value
       end
     end
   end

@@ -18,7 +18,10 @@ namespace :db do
   end
 
   desc "Reset database"
-  task reset: [ :drop, :create ] do
+  task reset: [ :drop, :create, :seeds ] do
+    # Rake::Task['db:drop']
+    # Rake::Task['db:create']
+    # Rake::Task['db:seeds']
   end
 
   desc "Load seeds"
