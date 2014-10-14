@@ -27,8 +27,6 @@ module OnOff
           create_parameters
           create_values
 
-          # create_sku_parameters
-
           # create_tags
           # create_taggings
         end

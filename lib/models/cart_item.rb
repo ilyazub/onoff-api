@@ -10,12 +10,13 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
-        property :amount, Integer, required: true, default: 0
+        property :amount, Integer, required: true, default: 1
 
         belongs_to :cart
         belongs_to :device
 
         has n, :device_series, through: :device, constraint: :skip
+        has n, :selected_values, constraint: :destroy
 
         timestamps :at
 

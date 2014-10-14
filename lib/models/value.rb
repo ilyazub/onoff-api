@@ -18,6 +18,7 @@ module OnOff
         property :selected_by_default, Boolean, required: true, default: false
 
         belongs_to :parameter, 'Parameter'
+        has n, :selected_values, constraint: :destroy
 
         timestamps :at
 
