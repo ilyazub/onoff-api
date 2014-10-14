@@ -14,7 +14,8 @@ module OnOff
         property :code, String, required: true, unique_index: :parameter_code
 
         property :description, String, required: true
-        property :unit_price, Float, required: true
+        property :unit_price, Float, required: true, default: 0.0
+        property :selected_by_default, Boolean, required: true, default: false
 
         belongs_to :parameter, 'Parameter'
 

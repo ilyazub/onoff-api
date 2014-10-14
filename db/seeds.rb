@@ -224,12 +224,13 @@ module OnOff
             ]
 
             (1..parameters_amount).to_a.shuffle.map do |parameter_id|
-              values = value_hashes.sample(rand(1..value_hashes.size)).map do |value|
+              values = value_hashes.sample(rand(1..value_hashes.size)).map.with_index do |value, index|
                 {
                   parameter_id: parameter_id,
                   code: value[:code],
                   description: value[:description],
-                  unit_price: rand(1..100.0)
+                  unit_price: rand(1..100.0),
+                  selected_by_default: index == 0
                 }
               end
 

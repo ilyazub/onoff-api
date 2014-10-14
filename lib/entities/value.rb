@@ -7,6 +7,7 @@ module OnOff
         expose :id, documentation: { type: 'Integer' }
         expose :code, :description, documentation: { type: 'String' }
         expose :unit_price, documentation: { type: 'Float' }
+        expose :selected_by_default, documentation: { type: 'Boolean' }
       end
     end
   end
