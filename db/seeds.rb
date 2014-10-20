@@ -34,39 +34,36 @@ module OnOff
         private
           def create_device_groups
             Models::DeviceGroup.bulk_create([
+              { title: 'Рамка' },
               { title: 'Розетка' },
               { title: 'Выключатель' },
-              { title: 'Диммер' },
-              { title: 'Рамка' },
-              { title: 'Опция 1' }
+              { title: 'Диммер' }
             ])
           end
 
           def create_devices
             device_groups = Models::DeviceGroup.all
 
-            jacks           = device_groups.first(title: 'Розетка')
+            frames          = device_groups.first(title: 'Рамка')
+            sockets         = device_groups.first(title: 'Розетка')
             switches        = device_groups.first(title: 'Выключатель')
             dimmers         = device_groups.first(title: 'Диммер')
-            frames          = device_groups.first(title: 'Рамка')
-            first_parameter = device_groups.first(title: 'Опция 1')
 
             Models::Device.bulk_create([
-              { title: 'Розетка', device_group: jacks },
-              { title: 'Розетка с крышкой',     device_group: jacks },
-              { title: 'Выключатель 1 кл.',     device_group: switches },
-              { title: 'Выключатель 2 кл.',     device_group: switches },
-              { title: 'Розетка ТВ',            device_group: jacks },
-              { title: 'Розетка ТВ+Спутник',    device_group: jacks },
-              { title: 'Розетка компьютерная',  device_group: jacks },
-              { title: 'Розетка телефонная',    device_group: jacks },
-              { title: 'Диммер поворотный',     device_group: dimmers },
               { title: 'Рамка 1-ая',            device_group: frames },
               { title: 'Рамка 2-ая',            device_group: frames },
               { title: 'Рамка 3-ая',            device_group: frames },
               { title: 'Рамка 4-ая',            device_group: frames },
-              { title: 'Рамка 5-ая',            device_group: frames },
-              # { title: 'Декоративная накладка', device_group: first_parameter }
+              { title: 'Рамка 5-ая',            device_group: frames }
+              { title: 'Розетка',               device_group: sockets },
+              { title: 'Розетка с крышкой',     device_group: sockets },
+              { title: 'Розетка ТВ',            device_group: sockets },
+              { title: 'Розетка ТВ+Спутник',    device_group: sockets },
+              { title: 'Розетка компьютерная',  device_group: sockets },
+              { title: 'Розетка телефонная',    device_group: sockets },
+              { title: 'Выключатель 1 кл.',     device_group: switches },
+              { title: 'Выключатель 2 кл.',     device_group: switches },
+              { title: 'Диммер поворотный',     device_group: dimmers }
             ])
           end
 
