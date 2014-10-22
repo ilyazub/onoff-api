@@ -15,6 +15,14 @@ module OnOff
         timestamps :at
 
         Entity =  Entities::Cart
+
+        def self.get_or_create(id)
+          get(id) || create
+        end
+
+        def series
+          devices.series
+        end
       end
     end
   end

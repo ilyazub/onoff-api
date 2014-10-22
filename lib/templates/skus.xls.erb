@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html5">
+  <Worksheet ss:Name="Артикулы">
+    <Table>
+      <Row>
+        <Cell><Data ss:Type="String">Название</Data></Cell>
+        <Cell><Data ss:Type="String">Количество</Data></Cell>
+        <Cell><Data ss:Type="String">Стоимость</Data></Cell>
+      </Row>
+    <% skus.each do |sku| %>
+      <Row>
+        <Cell><Data ss:Type="String"><%= sku.title %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= sku.amount %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= sku.price %></Data></Cell>
+      </Row>
+    <% end %>
+    </Table>
+  </Worksheet>
+</Workbook>

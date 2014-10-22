@@ -1,8 +1,12 @@
 require 'grape'
+require 'erb'
+require 'tilt'
+require 'tilt/erb'
 
-require_relative './carts'
 require_relative './devices'
+require_relative './carts'
 require_relative './cart_items'
+require_relative './series'
 
 module OnOff
   module API
@@ -16,6 +20,7 @@ module OnOff
         mount Devices
         mount Carts
         mount CartItems
+        mount Series
       end
     end
   end

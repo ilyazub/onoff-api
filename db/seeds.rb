@@ -54,7 +54,7 @@ module OnOff
               { title: 'Рамка 2-ая',            device_group: frames },
               { title: 'Рамка 3-ая',            device_group: frames },
               { title: 'Рамка 4-ая',            device_group: frames },
-              { title: 'Рамка 5-ая',            device_group: frames }
+              { title: 'Рамка 5-ая',            device_group: frames },
               { title: 'Розетка',               device_group: sockets },
               { title: 'Розетка с крышкой',     device_group: sockets },
               { title: 'Розетка ТВ',            device_group: sockets },

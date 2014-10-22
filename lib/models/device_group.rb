@@ -1,4 +1,6 @@
 require_relative './base'
+# require_relative './parameter'
+
 require_relative '../entities/device_group'
 
 module OnOff
@@ -10,13 +12,13 @@ module OnOff
         property :id, Serial, required: true
         property :title, String, required: true, unique_index: true
 
-        has n, :devices
+        has n, :devices, constraint: :destroy
+
+        # has n, :parameters, constraint: :destroy
 
         timestamps :at
 
-        def entity
-          Entities::DeviceGroup.new(self)
-        end
+        Entity = Entities::DeviceGroup
       end
     end
   end

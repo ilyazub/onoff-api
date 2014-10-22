@@ -25,6 +25,10 @@ module OnOff
         timestamps :at
 
         Entity = Entities::Series
+
+        def device_groups
+          devices.device_groups
+        end
       end
     end
   end
