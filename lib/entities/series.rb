@@ -6,8 +6,8 @@ module OnOff
     module Entities
       class Series < Base
         expose :id
-        expose :title, documentation: { type: 'String' }
-        expose :device_groups, using: DeviceGroup
+        expose :title
+        expose :device_groups, as: :deviceGroups, using: DeviceGroup
       end
     end
   end

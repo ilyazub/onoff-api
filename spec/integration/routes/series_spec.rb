@@ -1,31 +1,7 @@
-RSpec.describe OnOff::API::Series, :focus do
+RSpec.describe OnOff::API::Series do
   let(:cart)    { OnOff::API::Models::Cart.create }
   let(:cart_id) { cart.id }
-  let(:series)  { series_entities(cart.series) }
-
-  def series_entities(series)
-    OnOff::API::Entities::Series.represent(series).to_json
-
-    # series = {
-    #   id, title, manufacturer: {}, deviceGroups: [
-    #     { id, title, parameters: [
-    #       { id, variable, description, values: [
-    #           { id, code, description, selected }
-    #         ]
-    #       }],
-    #       skus: [
-    #         { title, unitPrice, amount, parameters: [
-    #             { parameterId, values: [
-    #                 valueId, unitPrice
-    #               ]
-    #             }
-    #           ]
-    #         }
-    #       ]
-    #     }
-    #   ]
-    # }
-  end
+  let(:series) { OnOff::API::Entities::Series.represent(cart.series).to_json }
 
   def prepare_db
     device_group = OnOff::API::Models::DeviceGroup.create(title: 'Рамка')

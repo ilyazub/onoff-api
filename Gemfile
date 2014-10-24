@@ -18,6 +18,6 @@ group :test do
   gem 'rspec'
   gem 'rspec-instafail'
   gem 'rack-test', require: 'rack/test'
-  gem 'grape-entity-matchers'
   gem 'database_cleaner'
+  gem 'guard-rspec', require: false
 end

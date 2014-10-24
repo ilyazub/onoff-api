@@ -5,7 +5,7 @@ module OnOff
     module Entities
       class Manufacturer < Base
         expose :id
-        expose :title, :country, :assembly, documentation: { type: 'String' }
+        expose :title, :country, :assembly
       end
     end
   end

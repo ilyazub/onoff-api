@@ -7,7 +7,7 @@ module OnOff
     module Entities
       class CartItem < Base
         expose :id
-        expose :amount, documentation: { type: 'Integer' }
+        expose :amount
         expose :device, using: Device
         expose :selected_values, using: SelectedValue
       end

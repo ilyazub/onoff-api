@@ -1,12 +1,14 @@
+require_relative './base'
 require_relative './cart_item'
 
 module OnOff
   module API
     module Entities
       class Cart < Base
-        expose :id, documentation: { type: 'String', desc: 'UUID of the cart' } do |cart, options|
+        expose :id do |cart|
           cart.id.to_s
         end
+
         expose :cart_items, using: CartItem
       end
     end

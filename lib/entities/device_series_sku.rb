@@ -1,17 +1,22 @@
 require_relative './base'
-
-require_relative './device_series'
 require_relative './sku'
-require_relative './parameter'
+require_relative './sku_parameter'
 
 module OnOff
   module API
     module Entities
       class DeviceSeriesSKU < Base
-        expose :amount, :layer
+        expose :id, :amount, :layer
 
-        expose :sku, using: SKU
-        expose :parameters, using: Parameter
+        expose :title do |device_series_sku|
+          device_series_sku.sku.title
+        end
+
+        expose :unit_price, as: :unitPrice do |device_series_sku|
+          device_series_sku.sku.unitPrice
+        end
+
+        expose :parameters, using: SKUParameter
       end
     end
   end

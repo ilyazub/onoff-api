@@ -3,11 +3,9 @@ require_relative './base'
 module OnOff
   module API
     module Entities
-      class Value < Base
-        expose :id
-        expose :code, :description
+      class SKUValue < Base
+        expose :value_id, as: :valueId
         expose :unit_price, as: :unitPrice
-        expose :selected
       end
     end
   end

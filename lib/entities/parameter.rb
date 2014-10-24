@@ -1,6 +1,4 @@
 require_relative './base'
-
-require_relative './device_series'
 require_relative './value'
 
 module OnOff

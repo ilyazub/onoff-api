@@ -4,9 +4,9 @@ module OnOff
   module API
     module Entities
       class SKU < Base
-        expose :id, documentation: { type: 'Integer' }
-        expose :title, documentation: { type: 'String' }
-        expose :unit_price, documentation: { type: 'Float' }
+        expose :id
+        expose :title
+        expose :unit_price, as: :unitPrice
       end
     end
   end
