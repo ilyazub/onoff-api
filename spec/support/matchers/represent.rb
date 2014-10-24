@@ -11,7 +11,7 @@ RSpec::Matchers.define :represent do |expected|
     @entity = entity
   end
 
-  chain :runtime_exposure do |object, exposure|
+  chain :exposes_at_runtime do |object, exposure|
     @transformation_object, @transformation_exposure = object, exposure
   end
 

@@ -13,7 +13,7 @@ module OnOff
         end
 
         expose :unit_price, as: :unitPrice do |device_series_sku|
-          device_series_sku.sku.unitPrice
+          device_series_sku.sku.unit_price
         end
 
         expose :parameters, using: SKUParameter
