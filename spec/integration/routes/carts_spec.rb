@@ -8,27 +8,34 @@ RSpec.describe OnOff::API::Carts do
   end
 
   describe 'POST /carts' do
-    it 'initializes a new cart' do
-      post '/carts'
+    let(:created_cart) { OnOff::API::Entities::Cart.represent(OnOff::API::Models::Cart.first).to_json }
 
-      hash = { id: "5d666650-5d6b-4496-845f-b6ab8617243a", cart_items: [] }
-      expect(last_response.body).to eq hash.to_json
+    it 'creates a new cart' do
+      expect { post '/carts' }.to change(OnOff::API::Models::Cart, :count).by(1)
+      expect(last_response.body).to eq created_cart
     end
   end
 
   describe 'PUT /carts' do
-    let(:existing_cart)   { { id: "5d666650-5d6b-4496-845f-b6ab8617243a" } }
-    let(:unexisting_cart) { { id: UUIDTools::UUID.random_create } }
-    let(:result_json)     { { id: "5d666650-5d6b-4496-845f-b6ab8617243a", cart_items: [] } }
+    let(:cart_entity) { OnOff::API::Entities::Cart.represent(cart).to_json }
 
-    it 'updates an existing cart' do
-      put "/carts/#{existing_cart[:id]}", existing_cart.to_json
-      expect(last_response.body).to eq result_json.to_json
+    context 'when cart exists' do
+      let(:cart) { OnOff::API::Models::Cart.create }
+
+      it 'updates a cart' do
+        put "/carts/#{cart.id}", cart.to_json
+        expect(cart.updated_at).to be > cart.created_at
+        expect(last_response.body).to eq cart_entity
+      end
     end
 
-    it 'updates an unexisting cart' do
-      put "/carts/#{unexisting_cart[:id]}", unexisting_cart.to_json
-      expect(last_response.body).to eq result_json.to_json
+    context 'when cart is not exist' do
+      let(:cart) { OnOff::API::Models::Cart.new }
+
+      it 'creates a new cart' do
+        put "/carts/#{cart.id}", cart.to_json
+        expect(last_response.body).not_to eq cart_entity
+      end
     end
   end
 end
