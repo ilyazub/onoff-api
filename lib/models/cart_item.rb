@@ -15,8 +15,6 @@ module OnOff
         belongs_to :cart
         belongs_to :device
 
-        has n, :device_series, through: :device
-
         timestamps :at
 
         Entity = Entities::CartItem

@@ -99,8 +99,8 @@ module OnOff
             (1..devices_amount).to_a.shuffle.map do |device_id|
               device_series = (1..series_amount).to_a.shuffle.map do |series_id|
                 {
-                  device_id:        device_id,
-                  series_id:        series_id,
+                  device_id:  device_id,
+                  series_id:  series_id
                 }
               end
 
@@ -171,7 +171,7 @@ module OnOff
                   device_series_id: device_series_id,
                   sku_id: sku_id,
                   amount: amount,
-                  layer: layer
+                  layer: layer + 1
                 }
               end
 

@@ -7,14 +7,6 @@ module OnOff
           present Models::Cart.create
         end
 
-        desc 'Gets a cart'
-        params do
-          requires :id, type: String, desc: 'UUID of the cart'
-        end
-        get '/:id' do
-          present Models::Cart.get(params[:id])
-        end
-
         desc 'Finds or creates a new cart'
         params do
           requires :id, type: String, desc: 'UUID of the cart'
