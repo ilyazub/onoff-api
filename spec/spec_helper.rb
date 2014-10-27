@@ -5,6 +5,8 @@ require File.expand_path '../../lib/onoff', __FILE__
 require 'rack/test'
 require 'database_cleaner'
 require 'rspec/expectations'
+require 'dm-rspec'
+
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
 module RSpecMixin
@@ -22,6 +24,7 @@ RSpec.configure do |config|
 
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
+    mocks.verify_doubled_constant_names = true
   end
 
   begin
@@ -41,20 +44,21 @@ RSpec.configure do |config|
     config.order = :random
 
     Kernel.srand config.seed
-  end
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
+    config.before(:suite) do
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation)
+    end
 
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
 
-  config.include RSpecMixin
+    config.include RSpecMixin
+    config.include(DataMapper::Matchers)
+  end
 end

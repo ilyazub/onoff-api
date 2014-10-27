@@ -4,7 +4,7 @@ module OnOff
   module API
     module Entities
       class SelectedValue < Base
-        expose :cart_item_id, :value_id, documentation: { type: 'Integer' }
+        expose :cart_id, :code
       end
     end
   end

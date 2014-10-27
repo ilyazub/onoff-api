@@ -1,4 +1,7 @@
 require_relative './base'
+require_relative './cart_item'
+require_relative './selected_value'
+
 require_relative '../entities/cart'
 
 module OnOff
@@ -11,6 +14,8 @@ module OnOff
 
         has n, :cart_items, constraint: :destroy
         has n, :devices, through: :cart_items
+
+        has n, :selected_values, constraint: :destroy
 
         timestamps :at
 

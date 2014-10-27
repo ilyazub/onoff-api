@@ -19,5 +19,8 @@ group :test do
   gem 'rspec-instafail'
   gem 'rack-test', require: 'rack/test'
   gem 'database_cleaner'
+
+  gem 'dm-rspec'
+
   gem 'guard-rspec', require: false
 end

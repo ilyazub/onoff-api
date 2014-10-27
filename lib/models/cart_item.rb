@@ -15,8 +15,7 @@ module OnOff
         belongs_to :cart
         belongs_to :device
 
-        has n, :device_series, through: :device, constraint: :skip
-        has n, :selected_values, constraint: :destroy
+        has n, :device_series, through: :device
 
         timestamps :at
 

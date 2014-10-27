@@ -15,7 +15,7 @@ module OnOff
         property :layer, Integer, required: true, default: 1
 
         belongs_to :sku, 'SKU'
-        belongs_to :device_series, 'DeviceSeries'
+        belongs_to :device_series
 
         has n, :parameters, constraint: :destroy
         has n, :values, through: :parameters

@@ -1,5 +1,4 @@
-require_relative './cart_item'
-require_relative './value'
+require_relative './cart'
 
 require_relative '../entities/selected_value'
 
@@ -9,8 +8,8 @@ module OnOff
       class SelectedValue < Base
         include DataMapper::Resource
 
-        belongs_to :cart_item, key: true
-        belongs_to :value, key: true
+        belongs_to :cart, key: true, required: true
+        property :code, String, key: true, required: true
 
         timestamps :at
 

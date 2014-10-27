@@ -1,6 +1,4 @@
-require_relative './device_series'
 require_relative './series'
-require_relative './device'
 
 require_relative '../entities/manufacturer'
 
@@ -15,9 +13,7 @@ module OnOff
         property :country, String, required: true
         property :assembly, String, required: true
 
-        has n, :device_series, constraint: :destroy
-        has n, :series, through: :device_series
-        has n, :devices, through: :device_series
+        has n, :series, 'Series'
 
         timestamps :at
 

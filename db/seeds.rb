@@ -7,11 +7,13 @@ module OnOff
         attr_accessor :variable_pattern
 
         def initialize
-          @variable_pattern = '{{variable}}'
-
           DataMapper.finalize
           DataMapper.auto_migrate!
           DataMapper.auto_upgrade!
+
+          return if ENV['API_ENV'] == 'test'
+
+          @variable_pattern = '{{variable}}'
 
           create_device_groups
 
@@ -193,8 +195,6 @@ module OnOff
               sku.device_series_skus.map do |device_series_sku|
                 device_series_sku.parameters.first_or_create({ variable: variable }, { description: description })
               end
-
-              sku.parameters
             end
           end
 
@@ -230,22 +230,6 @@ module OnOff
               end
 
               Models::Value.bulk_create(values)
-            end
-          end
-
-          def create_sku_parameters
-            skus_amount = Models::DeviceSeriesSKU.count
-            parameters_amount = Models::Parameter.count
-
-            (1..skus_amount).to_a.shuffle.map do |sku|
-              sku_parameters = (1..parameters_amount).to_a.shuffle.map do |parameter|
-                {
-                  sku_id: sku,
-                  parameter_id: parameter
-                }
-              end
-
-              Models::SKUParameter.bulk_create(sku_parameters)
             end
           end
 

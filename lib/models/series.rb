@@ -1,8 +1,5 @@
-require_relative './device_series'
-require_relative './device'
 require_relative './manufacturer'
-require_relative './device_series_sku'
-require_relative './tagging'
+require_relative './device_series'
 
 require_relative '../entities/series'
 
@@ -13,22 +10,18 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
-        property :title, String, required: true, unique_index: true
+        property :title, String, required: true, unique: true
+
+        belongs_to :manufacturer
 
         has n, :device_series, constraint: :destroy
-
         has n, :devices, through: :device_series
-        has n, :manufacturer, 'Manufacturer', through: :device_series
         has n, :device_series_skus, 'DeviceSeriesSKU', through: :device_series
         has n, :taggings, through: :device_series
 
         timestamps :at
 
         Entity = Entities::Series
-
-        def device_groups
-          devices.device_groups
-        end
       end
     end
   end

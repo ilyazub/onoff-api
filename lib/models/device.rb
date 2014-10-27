@@ -2,8 +2,6 @@ require_relative './base'
 require_relative './device_group'
 require_relative './device_series'
 require_relative './cart_item'
-require_relative './series'
-require_relative './manufacturer'
 
 require_relative '../entities/device'
 
@@ -14,7 +12,7 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
-        property :title, String, required: true, unique_index: true
+        property :title, String, required: true, unique: true
 
         belongs_to :device_group
 
@@ -23,7 +21,7 @@ module OnOff
 
         has n, :device_series, constraint: :destroy
         has n, :series, through: :device_series
-        has n, :manufacturers, through: :device_series
+        has n, :device_series_skus, 'DeviceSeriesSKU', through: :device_series
 
         timestamps :at
 

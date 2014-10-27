@@ -5,8 +5,7 @@ module OnOff
   module API
     module Entities
       class Parameter < Base
-        expose :id
-        expose :variable, :description, documentation: { type: 'String' }
+        expose :id, :variable, :description
 
         expose :values, using: Value
       end

@@ -8,17 +8,12 @@ module OnOff
       class Value < Base
         include DataMapper::Resource
 
-        property :id, Serial, key: true, required: true
-
-        property :parameter_id, Integer, required: true, unique_index: :parameter_code
-        property :code, String, required: true, unique_index: :parameter_code
+        belongs_to :parameter, key: true
+        property :code, String, key: true, required: true
 
         property :description, String, required: true
         property :unit_price, Float, required: true, default: 0.0
-        property :selected_by_default, Boolean, required: true, default: false
-
-        belongs_to :parameter, 'Parameter'
-        has n, :selected_values, constraint: :destroy
+        property :selected, Boolean, required: true, default: false
 
         timestamps :at
 

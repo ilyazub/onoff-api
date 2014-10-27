@@ -9,7 +9,7 @@ module OnOff
           cart.id.to_s
         end
 
-        expose :cart_items, using: CartItem
+        expose :cart_items, as: :cartItems, using: CartItem
       end
     end
   end

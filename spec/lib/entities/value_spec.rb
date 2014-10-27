@@ -5,4 +5,5 @@ RSpec.describe OnOff::API::Entities::Value do
   it { is_expected.to represent(:code) }
   it { is_expected.to represent(:description) }
   it { is_expected.to represent(:selected) }
+  it { is_expected.to represent(:unit_price).as(:unitPrice) }
 end
