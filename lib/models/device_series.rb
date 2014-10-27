@@ -16,11 +16,8 @@ module OnOff
 
         property :id, Serial, key: true, required: true
 
-        property :device_id, Integer, unique_index: :unique_device_series, required: true
-        property :series_id, Integer, unique_index: :unique_device_series, required: true
-
-        belongs_to :device
-        belongs_to :series, 'Series'
+        belongs_to :device, required: true
+        belongs_to :series, 'Series', required: true
 
         has n, :device_series_skus, 'DeviceSeriesSKU', constraint: :destroy
         has n, :skus, 'SKU', through: :device_series_skus

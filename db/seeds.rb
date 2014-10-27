@@ -16,14 +16,14 @@ module OnOff
           @variable_pattern = '{{variable}}'
 
           create_device_groups
-
           create_devices
-          create_series
+
           create_manufacturers
+          create_series
 
           create_device_series
-          create_skus
 
+          create_skus
           create_device_series_skus
 
           create_parameters
@@ -46,10 +46,10 @@ module OnOff
           def create_devices
             device_groups = Models::DeviceGroup.all
 
-            frames          = device_groups.first(title: 'Рамка')
-            sockets         = device_groups.first(title: 'Розетка')
-            switches        = device_groups.first(title: 'Выключатель')
-            dimmers         = device_groups.first(title: 'Диммер')
+            frames    = device_groups.first(title: 'Рамка')
+            sockets   = device_groups.first(title: 'Розетка')
+            switches  = device_groups.first(title: 'Выключатель')
+            dimmers   = device_groups.first(title: 'Диммер')
 
             Models::Device.bulk_create([
               { title: 'Рамка 1-ая',            device_group: frames },
@@ -69,44 +69,42 @@ module OnOff
             ])
           end
 
-          def create_series
-            series = Models::Series.bulk_create([
-              { title: 'Basic 55' },
-              { title: 'Busch-Duro Reflex' },
-              { title: 'Spring' },
-              { title: 'Alpha' },
-              { title: 'Future/Future Linear' },
-              { title: 'Solo' },
-              { title: 'Axcent' },
-              { title: 'Impuls' },
-              { title: 'Steel' },
-              { title: 'Carat' }
+          def create_manufacturers
+            Models::Manufacturer.bulk_create([
+              { assembly: 'Busch Jaeger', title: 'ABB', country: 'Германия' }
             ])
           end
 
-          def create_manufacturers
-            manufacturers = Models::Manufacturer.bulk_create([
-              { assembly: 'Busch Jaeger', title: 'ABB', country: 'Германия' }
+          def create_series
+            manufacturer = Models::Manufacturer.first
+
+            Models::Series.bulk_create([
+              { title: 'Basic 55', manufacturer: manufacturer },
+              { title: 'Busch-Duro Reflex', manufacturer: manufacturer },
+              { title: 'Spring', manufacturer: manufacturer },
+              { title: 'Alpha', manufacturer: manufacturer },
+              { title: 'Future/Future Linear', manufacturer: manufacturer },
+              { title: 'Solo', manufacturer: manufacturer },
+              { title: 'Axcent', manufacturer: manufacturer },
+              { title: 'Impuls', manufacturer: manufacturer },
+              { title: 'Steel', manufacturer: manufacturer },
+              { title: 'Carat', manufacturer: manufacturer }
             ])
           end
 
           def create_device_series
             devices_amount = Models::Device.count
             series_amount = Models::Series.count
-            manufacturers_amount = Models::Manufacturer.count
 
-            device_series = (1..devices_amount).to_a.shuffle.map do |device_id|
-              (1..series_amount).to_a.shuffle.map do |series_id|
-                device_series = (1..manufacturers_amount).to_a.shuffle.map do |manufacturer_id|
-                  {
-                    device_id:        device_id,
-                    series_id:        series_id,
-                    manufacturer_id:  manufacturer_id
-                  }
-                end
-
-                Models::DeviceSeries.bulk_create(device_series)
+            (1..devices_amount).to_a.shuffle.map do |device_id|
+              device_series = (1..series_amount).to_a.shuffle.map do |series_id|
+                {
+                  device_id:        device_id,
+                  series_id:        series_id,
+                }
               end
+
+              Models::DeviceSeries.bulk_create(device_series)
             end
           end
 
@@ -160,7 +158,7 @@ module OnOff
 
           def create_device_series_skus
             device_series_amount = Models::DeviceSeries.count
-            skus = Models::SKU.all(fields: [ :id ]).map(&:id)
+            skus = Models::SKU.map(&:id)
 
             (1..device_series_amount).to_a.shuffle.map do |device_series_id|
               skus_dup = skus.dup
@@ -184,10 +182,10 @@ module OnOff
           def create_parameters
             skus = Models::SKU.all(:title.like => "%#{@variable_pattern}%")
 
-            variables = ('X'..'Z').to_a
-            descriptions = %w(Цвет Форма Вкус Запах)
+            variables = %w(X Y).to_a
+            descriptions = %w(Цвет Форма)
             skus.map do |sku|
-              variable = "#{variables.sample}#{rand(1..3)}"
+              variable = "#{variables.sample}#{rand(1..2)}"
               title = sku.title.sub(@variable_pattern, variable)
               sku.update(title: title)
 
@@ -205,11 +203,8 @@ module OnOff
               { code: '280', description: 'Анрацит' },
               { code: '281', description: 'Слоновая кость' },
               { code: '284', description: 'Серебро' },
-              { code: '285', description: 'Белый' },
               { code: '286', description: 'Белый бархат' },
-              { code: '287', description: 'Белый бархат' },
               { code: '288', description: 'Белый' },
-              { code: '291', description: 'Слоновая кость' },
               { code: '295', description: 'Бежевый' },
               { code: '296', description: 'Серый' },
               { code: '297', description: 'Бордовый' },
@@ -225,7 +220,7 @@ module OnOff
                   code: value[:code],
                   description: value[:description],
                   unit_price: rand(1..100.0),
-                  selected_by_default: index == 0
+                  selected: index == 0
                 }
               end
 

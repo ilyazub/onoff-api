@@ -9,7 +9,7 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
-        property :title, String, required: true, unique_index: true
+        property :title, String, required: true, unique: true
         property :country, String, required: true
         property :assembly, String, required: true
 

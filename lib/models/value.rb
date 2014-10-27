@@ -8,16 +8,20 @@ module OnOff
       class Value < Base
         include DataMapper::Resource
 
-        belongs_to :parameter, key: true
-        property :code, String, key: true, required: true
+        property :parameter_id, Integer, key: true, unique_index: :parameter_code, required: true
+        property :code, String, key: true, unique_index: :parameter_code, required: true
 
         property :description, String, required: true
         property :unit_price, Float, required: true, default: 0.0
         property :selected, Boolean, required: true, default: false
 
+        belongs_to :parameter
+
         timestamps :at
 
         Entity = Entities::Value
+
+        validates_uniqueness_of :code, scope: :parameter_id, message: "There's already a value of that code in this parameter"
       end
     end
   end
