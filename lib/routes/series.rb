@@ -1,6 +1,16 @@
 module OnOff
   module API
     class Series < Grape::API
+      helpers do
+        def current_cart
+          if cart = Models::Cart.get(params[:cart_id])
+            cart
+          else
+            error!('No such cart', 400)
+          end
+        end
+      end
+
       rescue_from ArgumentError do |e|
         Rack::Response.new({
           error: "#{e.class} error",
@@ -17,11 +27,19 @@ module OnOff
           resource :series do
             desc 'Get all devices in current cart'
             get do
-              if cart = Models::Cart.get(params[:cart_id])
-                present cart.series
-              else
-                error!('No such cart', 400)
-              end
+              present current_cart.series
+            end
+          end
+
+          resource :values do
+            desc 'Selects value'
+            params do
+              requires :parameter_id
+              requires :id
+              requires :selected
+            end
+            put do
+              present current_cart.selected_values.first_or_create(parameter_id: params[:parameter_id]).update(value_id: params[:id])
             end
           end
         end

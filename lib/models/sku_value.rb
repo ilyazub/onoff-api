@@ -1,7 +1,7 @@
 require_relative './sku_parameter'
 require_relative './value'
 
-require_relative '../entities/value'
+require_relative '../entities/sku_value'
 
 module OnOff
   module API
