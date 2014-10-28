@@ -22,6 +22,26 @@ module OnOff
         timestamps :at
 
         Entity = Entities::Series
+
+        def min_price
+          device_series_skus.inject(0) { |mem, device_series_sku| mem + device_series_sku.min_price }
+        end
+
+        def parameters
+          # parameters_groups = device_series_skus.parameters.group_by(&:title)
+
+          # parameters_groups.map do |parameter_group|
+          #   parameter_group.inject(Parameter.new) { |new_parameter, parameter| new_parameter.values << parameter.values }
+          # end
+
+          device_series_skus.parameters.inject([]) do |mem, parameter|
+            if found_parameter = mem.detect { |p| p.variable == parameter.variable }
+              found_parameter.values << parameter.values
+            else
+              mem << parameter
+            end
+          end
+        end
       end
     end
   end

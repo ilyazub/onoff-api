@@ -1,5 +1,4 @@
 require_relative './base'
-
 require_relative './device_series_sku'
 
 require_relative '../entities/sku'

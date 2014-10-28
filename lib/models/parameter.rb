@@ -25,6 +25,11 @@ module OnOff
         validates_uniqueness_of :variable, scope: :device_series_sku_id, message: "There's already a parameter of that variable in this device series SKU"
 
         Entity = Entities::Parameter
+
+        def min_price
+          selected_value = values.detect { |value| value.selected }
+          selected_value.unit_price
+        end
       end
     end
   end

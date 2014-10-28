@@ -192,6 +192,7 @@ module OnOff
               description = descriptions.sample
               sku.device_series_skus.map do |device_series_sku|
                 device_series_sku.parameters.first_or_create({ variable: variable }, { description: description })
+                device_series_sku.sku.update(unit_price: 0.0)
               end
             end
           end

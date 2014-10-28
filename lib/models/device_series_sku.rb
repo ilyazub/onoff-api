@@ -23,6 +23,20 @@ module OnOff
         timestamps :at
 
         Entity = Entities::DeviceSeriesSKU
+
+        def device
+          device_series.device
+        end
+
+        def min_price
+          price = if parameters.size
+            parameters.min_price
+          else
+            sku.unit_price
+          end
+
+          price * amount
+        end
       end
     end
   end
