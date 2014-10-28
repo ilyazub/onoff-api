@@ -8,9 +8,9 @@ module OnOff
       class DeviceSeries < Base
         expose :id
 
-        expose :series, using: Series
+        # expose :series, using: Series
 
-        expose :device_series_skus, as: :deviceSeriesSkus, using: DeviceSeriesSKU
+        # expose :device_series_skus, as: :deviceSeriesSkus, using: DeviceSeriesSKU
       end
     end
   end

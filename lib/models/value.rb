@@ -1,4 +1,5 @@
 require_relative './parameter'
+require_relative './sku_value'
 
 require_relative '../entities/value'
 
@@ -8,14 +9,14 @@ module OnOff
       class Value < Base
         include DataMapper::Resource
 
-        property :parameter_id, Integer, key: true, unique_index: :parameter_code, required: true
-        property :code, String, key: true, unique_index: :parameter_code, required: true
+        property :id,           Serial,   key: true, required: true
+        property :parameter_id, Integer,  unique_index: :parameter_code, required: true
+        property :code,         String,   unique_index: :parameter_code, required: true
+        property :description,  String,   required: true
+        property :selected,     Boolean,  default: false, required: true
 
-        property :description, String, required: true
-        property :unit_price, Float, required: true, default: 0.0
-        property :selected, Boolean, required: true, default: false
-
-        belongs_to :parameter
+        belongs_to  :parameter,   required: true
+        has n,      :sku_values,  'SKUValue', constraint: :destroy
 
         timestamps :at
 

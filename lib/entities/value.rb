@@ -4,9 +4,7 @@ module OnOff
   module API
     module Entities
       class Value < Base
-        expose :code, :description, :selected
-
-        expose :unit_price, as: :unitPrice
+        expose :id, :code, :description, :selected
       end
     end
   end

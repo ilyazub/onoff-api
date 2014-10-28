@@ -1,6 +1,5 @@
 require_relative './base'
-require_relative './sku'
-require_relative './parameter'
+require_relative './sku_parameter'
 
 module OnOff
   module API
@@ -8,9 +7,11 @@ module OnOff
       class DeviceSeriesSKU < Base
         expose :id, :amount, :layer
 
-        expose :sku, using: SKU
+        expose :device_id, as: :deviceId
+        expose :title
+        expose :unit_price, as: :unitPrice
 
-        expose :parameters, using: Parameter
+        expose :sku_parameters, as: :parameters, using: SKUParameter
       end
     end
   end

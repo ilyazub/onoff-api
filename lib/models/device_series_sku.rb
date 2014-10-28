@@ -1,6 +1,6 @@
 require_relative './sku'
 require_relative './device_series'
-require_relative './parameter'
+require_relative './sku_parameter'
 
 require_relative '../entities/device_series_sku'
 
@@ -13,30 +13,20 @@ module OnOff
         property :id, Serial, required: true, key: true
         property :amount, Integer, required: true, default: 1
         property :layer, Integer, required: true, default: 1
+        property :unit_price, Float, required: true, default: 0.0
 
         belongs_to :sku, 'SKU', required: true
         belongs_to :device_series, required: true
 
-        has n, :parameters, constraint: :destroy
-        has n, :values, through: :parameters
+        has n, :sku_parameters, 'SKUParameter', constraint: :destroy
 
         timestamps :at
 
         Entity = Entities::DeviceSeriesSKU
 
-        def device
-          device_series.device
-        end
-
-        def min_price
-          price = if parameters.size
-            parameters.min_price
-          else
-            sku.unit_price
-          end
-
-          price * amount
-        end
+        def title() sku.title end
+        def device_id() device.id end
+        def device() device_series.device end
       end
     end
   end

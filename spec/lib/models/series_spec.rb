@@ -11,16 +11,4 @@ RSpec.describe OnOff::API::Models::Series do
 
   it { is_expected.to have_many(:device_series) }
   it { is_expected.to have_many(:devices) }
-  it { is_expected.to have_many(:device_series_skus) }
-  it { is_expected.to have_many(:taggings) }
-
-  describe '#parameters' do
-    it 'groups parameters by variable' do
-      fail 'Not implemented'
-    end
-
-    it 'concatenates values in grouped parameters' do
-      fail 'Not implemented'
-    end
-  end
 end
