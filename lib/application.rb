@@ -4,7 +4,7 @@ module OnOff
       attr_accessor :config, :env, :database
 
       def initialize
-        @env = ENV['API_ENV'] || 'development'
+        @env = ENV['API_ENV'] ||= 'development'
 
         @config = {
           database: YAML.load_file('./config/database.yaml')

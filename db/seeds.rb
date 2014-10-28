@@ -83,12 +83,12 @@ module OnOff
 
             Models::Series.bulk_create([
               { title: 'Basic 55', manufacturer: manufacturer },
-              { title: 'Busch-Duro Reflex', manufacturer: manufacturer },
+              # { title: 'Busch-Duro Reflex', manufacturer: manufacturer },
               # { title: 'Spring', manufacturer: manufacturer },
               # { title: 'Alpha', manufacturer: manufacturer },
               # { title: 'Future/Future Linear', manufacturer: manufacturer },
-              # { title: 'Solo', manufacturer: manufacturer },
-              # { title: 'Axcent', manufacturer: manufacturer },
+              { title: 'Solo', manufacturer: manufacturer },
+              { title: 'Axcent', manufacturer: manufacturer },
               # { title: 'Impuls', manufacturer: manufacturer },
               # { title: 'Steel', manufacturer: manufacturer },
               # { title: 'Carat', manufacturer: manufacturer }
@@ -119,7 +119,7 @@ module OnOff
               { title: "N2288.1 #{@variable_pattern}" },
               # { title: "N2271.9" },
               # { title: "0213-507" },
-              # { title: "1803-#{@variable_pattern}" },
+              { title: "1803-#{@variable_pattern}" },
               # { title: "2006/6 UC-#{@variable_pattern}-507" },
               # { title: "2000/6 US" },
               # { title: "2001/6 U-507  " },
@@ -184,21 +184,30 @@ module OnOff
           end
 
           def create_parameters
-            skus = Models::SKU.all(:title.like => "%#{@variable_pattern}%")
-            device_series_skus = Models::DeviceSeriesSKU.all(sku: { :title.like => "%#{@variable_pattern}%" })
+            series = Models::Series.all({
+              device_series: {
+                device_series_skus: {
+                  sku: { :title.like => "%#{@variable_pattern}%" }
+                }
+              }
+            })
 
             variables = %w(X Y)
             descriptions = %w(Цвет Форма)
 
-            device_series_skus.each do |device_series_sku|
-              variable = "#{variables.sample}#{rand(1..2)}"
-              description = descriptions.sample
+            variables.each_with_index do |var, index|
+              variable = "#{var}#{index + 1}"
+              description = descriptions.at(index)
+              series.each do |serie|
+                serie.parameters.first_or_create({ variable: variable }, { description: description })
 
-              title = device_series_sku.sku.title.sub(@variable_pattern, variable)
-              device_series_sku.sku.update(title: title)
+                serie.device_series_skus.each do |device_series_sku|
+                  title = device_series_sku.sku.title.sub(@variable_pattern, variable)
+                  device_series_sku.sku.update(title: title)
 
-              device_series_sku.device_series.parameters.first_or_create({ variable: variable }, { description: description })
-              device_series_sku.update(unit_price: 0.0)
+                  device_series_sku.update(unit_price: 0.0)
+                end
+              end
             end
           end
 
@@ -220,7 +229,7 @@ module OnOff
             ]
 
             (1..parameters_amount).to_a.shuffle.map do |parameter_id|
-              values = value_hashes.sample(rand(1..value_hashes.size)).map.with_index do |value, index|
+              values = value_hashes.map.with_index do |value, index|
                 {
                   parameter_id: parameter_id,
                   code:         value[:code],
