@@ -8,16 +8,24 @@
     <Table>
       <Row>
         <Cell><Data ss:Type="String">Название</Data></Cell>
+        <Cell><Data ss:Type="String">Цена / шт.</Data></Cell>
         <Cell><Data ss:Type="String">Количество</Data></Cell>
-        <Cell><Data ss:Type="String">Стоимость</Data></Cell>
+        <Cell><Data ss:Type="String">Итого</Data></Cell>
       </Row>
-    <% skus.each do |sku| %>
+      <% for sku in skus %>
+        <Row>
+          <Cell><Data ss:Type="String"><%= sku.compiled_title(cart) %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sku.amount_in_cart(cart) %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sku.unit_price %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sku.price(cart) %></Data></Cell>
+        </Row>
+      <% end %>
       <Row>
-        <Cell><Data ss:Type="String"><%= sku.title %></Data></Cell>
-        <Cell><Data ss:Type="Number"><%= sku.amount %></Data></Cell>
-        <Cell><Data ss:Type="Number"><%= sku.price %></Data></Cell>
+        <Cell><Data ss:Type="String">Итого:</Data></Cell>
+        <Cell><Data></Data></Cell>
+        <Cell><Data ss:Type="String">Количество</Data></Cell>
+        <Cell><Data ss:Type="Number"><%= skus.price(cart) %></Data></Cell>
       </Row>
-    <% end %>
     </Table>
   </Worksheet>
 </Workbook>

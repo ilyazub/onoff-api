@@ -29,6 +29,21 @@ module OnOff
             get do
               present current_cart.series
             end
+
+            segment '/:series_id' do
+              params do
+                requires :series_id, type: Integer
+              end
+
+              format :txt
+              content_type :xls, "application/vnd.ms-excel"
+
+              get 'skus.xls' do
+                device_series_skus = current_cart.devices.device_series.all(series_id: params[:series_id]).device_series_skus
+
+                Tilt::ERBTemplate.new('lib/templates/skus.xls.erb').render(Object.new, cart: current_cart, skus: device_series_skus)
+              end
+            end
           end
 
           resource :values do
@@ -39,7 +54,7 @@ module OnOff
               requires :selected
             end
             put do
-              present current_cart.selected_values.first_or_create(parameter_id: params[:parameter_id]).update(value_id: params[:id])
+              present current_cart.selected_values.get_or_create(cart_id: current_cart.id, parameter_id: params[:parameter_id], value_id: params[:id])
             end
           end
         end

@@ -28,6 +28,10 @@ module OnOff
         def series
           devices.series
         end
+
+        def specific_devices_amount(device)
+          cart_items.all(device: device).inject(0) { |amount, cart_item| amount + cart_item.amount }
+        end
       end
     end
   end

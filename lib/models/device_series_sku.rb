@@ -24,6 +24,24 @@ module OnOff
 
         Entity = Entities::DeviceSeriesSKU
 
+        def compiled_title(cart)
+          # cart.selected_values.values
+          title
+        end
+
+        def amount_in_cart(cart)
+          @amount_in_cart ||= amount * cart.specific_devices_amount(device)
+        end
+
+        def price(cart)
+          unit_price * amount_in_cart(cart)
+        end
+
+        def self.price(cart)
+          # price(cart)
+          25
+        end
+
         def title() sku.title end
         def device_id() device.id end
         def device() device_series.device end

@@ -204,8 +204,6 @@ module OnOff
                 serie.device_series_skus.each do |device_series_sku|
                   title = device_series_sku.sku.title.sub(@variable_pattern, variable)
                   device_series_sku.sku.update(title: title)
-
-                  device_series_sku.update(unit_price: 0.0)
                 end
               end
             end
