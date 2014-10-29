@@ -1,5 +1,5 @@
 require_relative './cart'
-require_relative './series'
+require_relative './parameter'
 
 require_relative '../entities/selected_value'
 
