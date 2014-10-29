@@ -36,7 +36,8 @@ module OnOff
               end
 
               format :txt
-              content_type :xls, "application/vnd.ms-excel"
+              content_type :txt, 'text/xml'
+              content_type :xls, 'application/vnd.ms-excel'
 
               get ':title' do
                 device_series_skus = current_cart.devices.device_series.all(series_id: params[:series_id]).device_series_skus

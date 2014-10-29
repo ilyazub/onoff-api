@@ -17,12 +17,9 @@ module OnOff
         belongs_to :device_group, required: true
 
         has n, :cart_items, constraint: :destroy
-        # has n, :carts, through: :cart_items
 
         has n, :device_series, constraint: :destroy
         has n, :series, through: :device_series
-        # has n, :device_series_skus, 'DeviceSeriesSKU', through: :device_series
-        # has n, :taggings, through: :device_series
 
         timestamps :at
 
