@@ -1,9 +1,13 @@
 <?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+  xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet"
+  xmlns:html="http://www.w3.org/TR/REC-html5"
   xmlns:o="urn:schemas-microsoft-com:office:office"
-  xmlns:x="urn:schemas-microsoft-com:office:excel"
   xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:html="http://www.w3.org/TR/REC-html5">
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
+  xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Worksheet ss:Name="Артикулы">
     <Table>
       <Row>
@@ -14,17 +18,17 @@
       </Row>
       <% for sku in skus %>
         <Row>
-          <Cell><Data ss:Type="String"><%= sku.compiled_title(cart) %></Data></Cell>
+          <Cell><Data ss:Type="String"><%= sku.compiled_title(cart, series_id) %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sku.price_per_unit(cart, series_id) %></Data></Cell>
           <Cell><Data ss:Type="Number"><%= sku.amount_in_cart(cart) %></Data></Cell>
-          <Cell><Data ss:Type="Number"><%= sku.unit_price %></Data></Cell>
-          <Cell><Data ss:Type="Number"><%= sku.price(cart) %></Data></Cell>
+          <Cell><Data ss:Type="Number"><%= sku.price(cart, series_id) %></Data></Cell>
         </Row>
       <% end %>
       <Row>
         <Cell><Data ss:Type="String">Итого:</Data></Cell>
-        <Cell><Data></Data></Cell>
-        <Cell><Data ss:Type="String">Количество</Data></Cell>
-        <Cell><Data ss:Type="Number"><%= skus.price(cart) %></Data></Cell>
+        <Cell><Data ss:Type="String"></Data></Cell>
+        <Cell><Data ss:Type="String"><%= skus.amount_in_cart(cart) %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= skus.price(cart, series_id) %></Data></Cell>
       </Row>
     </Table>
   </Worksheet>

@@ -201,16 +201,17 @@ module OnOff
               series.each do |serie|
                 serie.parameters.first_or_create({ variable: variable }, { description: description })
 
-                serie.device_series_skus.each do |device_series_sku|
+                serie.device_series_skus.all(sku: { :title.like => "%#{@variable_pattern}%" }).each do |device_series_sku|
                   title = device_series_sku.sku.title.sub(@variable_pattern, variable)
                   device_series_sku.sku.update(title: title)
+                  device_series_sku.update(unit_price: 0.0)
                 end
               end
             end
           end
 
           def create_values
-            parameters_amount = Models::Parameter.count
+            parameters = Models::Parameter.all
 
             value_hashes = [
               { code: '280', description: 'Анрацит' },
@@ -226,10 +227,10 @@ module OnOff
               # { code: '896', description: 'Дымчатый' }
             ]
 
-            (1..parameters_amount).to_a.shuffle.map do |parameter_id|
+            parameters.shuffle.map do |parameter|
               values = value_hashes.map.with_index do |value, index|
                 {
-                  parameter_id: parameter_id,
+                  parameter_id: parameter.id,
                   code:         value[:code],
                   description:  value[:description],
                   selected:     index == 0
@@ -241,35 +242,37 @@ module OnOff
           end
 
           def create_sku_parameters
-            device_series_skus_amount = Models::DeviceSeriesSKU.count
-            parameters_amount = Models::Parameter.count
+            device_series_skus = Models::DeviceSeriesSKU.all(unit_price: 0.0)
 
-            (1..device_series_skus_amount).to_a.shuffle.map do |device_series_sku_id|
-              values = (1..parameters_amount).to_a.shuffle.map do |parameter_id|
+            device_series_skus.shuffle.map do |device_series_sku|
+              parameters = Models::Parameter.all(series: { device_series: { device_series_skus: { id: device_series_sku.id } } })
+
+              parameters = parameters.shuffle.map do |parameter|
                 {
-                  device_series_sku_id: device_series_sku_id,
-                  parameter_id:         parameter_id
+                  device_series_sku_id: device_series_sku.id,
+                  parameter_id:         parameter.id
                 }
               end
 
-              Models::SKUParameter.bulk_create(values)
+              Models::SKUParameter.bulk_create(parameters)
             end
           end
 
           def create_sku_values
-            sku_parameters_amount = Models::SKUParameter.count
-            values_amount = Models::Value.count
+            sku_parameters = Models::SKUParameter.all
 
-            (1..sku_parameters_amount).to_a.shuffle.map do |sku_parameter_id|
-              values = (1..values_amount).to_a.shuffle.map do |value_id|
+            sku_parameters.shuffle.map do |sku_parameter|
+              values = Models::Value.all(parameter_id: sku_parameter.parameter_id)
+
+              sku_values = values.shuffle.map do |value|
                 {
-                  sku_parameter_id: sku_parameter_id,
-                  value_id:         value_id,
+                  sku_parameter_id: sku_parameter.id,
+                  value_id:         value.id,
                   unit_price:       rand(1..100.0)
                 }
               end
 
-              Models::SKUValue.bulk_create(values)
+              Models::SKUValue.bulk_create(sku_values)
             end
           end
 
