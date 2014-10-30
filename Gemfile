@@ -6,7 +6,6 @@ gem 'dm-postgres-adapter'
 gem 'grape'
 gem 'grape-entity'
 gem 'tilt'
-gem 'erubis'
 gem 'rack-cors', require: 'rack/cors'
 
 group :development, :test do
