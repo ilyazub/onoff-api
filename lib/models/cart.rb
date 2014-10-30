@@ -23,7 +23,12 @@ module OnOff
           get(id) || create
         end
 
-        def series() devices.series end
+        def series()
+          devices.series.each do |serie|
+            serie.remember_devices(devices)
+          end
+        end
+
         def devices() cart_items.devices end
 
         def specific_devices_amount(device)

@@ -24,7 +24,13 @@ module OnOff
 
         validates_uniqueness_of :title, scope: :manufacturer_id, message: "There's already a series of that title for this manufacturer"
 
-        def device_series_skus() device_series.device_series_skus end
+        def remember_devices(devices = [])
+          @devices = devices
+        end
+
+        def device_series_skus
+          device_series.all(device: @devices).device_series_skus
+        end
       end
     end
   end
