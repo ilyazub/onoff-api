@@ -1,6 +1,14 @@
-require 'pry'
+if ENV['API_ENV'] != 'production'
+  require 'pry'
+  require 'yaml'
+  require 'roo'
+end
+
 require 'data_mapper'
-require 'yaml'
+
+require 'erb'
+require 'tilt'
+require 'tilt/erb'
 
 require_relative './application'
 

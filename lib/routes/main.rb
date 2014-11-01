@@ -1,7 +1,4 @@
 require 'grape'
-require 'erb'
-require 'tilt'
-require 'tilt/erb'
 
 require_relative './devices'
 require_relative './carts'

@@ -7,7 +7,7 @@ module OnOff
         @env = ENV['API_ENV'] ||= 'development'
 
         @config = {
-          database: YAML.load_file('./config/database.yaml')
+          database: YAML.load(Tilt::ERBTemplate.new('./config/database.yaml').render(binding))
         }
 
         @database = Database.new(@config[:database][env])
