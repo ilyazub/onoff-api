@@ -124,7 +124,7 @@ module OnOff
 
           def create_manufacturers
             Models::Manufacturer.bulk_create([
-              { assembly: 'Busch Jaeger', title: 'ABB', country: 'Германия' }
+              { title: 'ABB', country: 'Германия' }
             ])
           end
 
