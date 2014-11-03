@@ -1,3 +1,5 @@
+#\ -s puma -P tmp/pids/rackup.pid
+
 require './lib/onoff'
 
 require 'rack/cors'
