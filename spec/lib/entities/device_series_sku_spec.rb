@@ -3,7 +3,6 @@ RSpec.describe OnOff::API::Entities::DeviceSeriesSKU do
 
   it { is_expected.to represent(:id) }
   it { is_expected.to represent(:amount) }
-  it { is_expected.to represent(:layer) }
 
   it { is_expected.to represent(:device_id).as(:deviceId) }
   it { is_expected.to represent(:title) }

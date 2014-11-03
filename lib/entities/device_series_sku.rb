@@ -5,7 +5,7 @@ module OnOff
   module API
     module Entities
       class DeviceSeriesSKU < Base
-        expose :id, :amount, :layer
+        expose :id, :amount
 
         expose :device_id, as: :deviceId
         expose :title

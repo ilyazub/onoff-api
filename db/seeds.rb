@@ -8,10 +8,6 @@ module OnOff
 
         def initialize
           DataMapper.finalize
-          DataMapper.auto_migrate!
-          DataMapper.auto_upgrade!
-
-          return unless ENV['API_ENV'] == 'development'
 
           @variable_pattern = '{{variable}}'
 
@@ -37,6 +33,60 @@ module OnOff
         end
 
         private
+          def create_everything
+            Models::Manufacturer.bulk_create([
+              { title: 'ABB', country: 'Германия' }
+            ])
+
+            Models::Manufacturer.first(title: 'ABB').series.bulk_create([
+              { title: 'Basic 55' },
+              { title: 'Reflex' },
+              { title: 'Busch-Duro' },
+              { title: 'Spring' },
+              { title: 'Alpha' },
+              { title: 'Alpha Exclusive' },
+              { title: 'Future/Future Linear' },
+              { title: 'Solo' },
+              { title: 'Axcent' },
+              { title: 'Impuls' },
+              { title: 'Pure Steel' },
+              { title: 'Carat ' }
+            ])
+
+            Models::DeviceGroup.bulk_create([
+              { title: 'Устройство' },
+              { title: 'Рамка' }
+            ])
+
+            Models::DeviceGroup.first(title: 'Устройство').devices.bulk_create([
+              { title: 'Розетка с заземлением' },
+              { title: 'Розетка с заз.и крышкой' },
+              { title: 'Розетка TV' },
+              { title: 'Розетка TV+R' },
+              { title: 'Розетка TF' },
+              { title: 'Розетка TF двойная' },
+              { title: 'Розетка компьютер н/э' },
+              { title: 'Выключатель 1-кл.' },
+              { title: 'Выключатель 1-кл.прох.' },
+              { title: 'Выключатель 2-кл.' },
+              { title: 'Выключатель 2-кл.прох.' },
+              { title: 'Выключатель 1-кл. подсв.' },
+              { title: 'Диммер повор. 400Вт' },
+              { title: 'Диммер повор. 600Вт' },
+              { title: 'Диммер сенсорный 500Вт' },
+              { title: 'Датчик дв./комф.выкл.' },
+              { title: 'Датчик движения Комфорт' }
+            ])
+
+            Models::DeviceGroup.first(title: 'Рамка').devices.bulk_create([
+              { title: 'Рамка 1 пост' },
+              { title: 'Рамка 2 поста' },
+              { title: 'Рамка 3 поста' },
+              { title: 'Рамка 4 поста' },
+              { title: 'Рамка 5 постов' }
+            ])
+          end
+
           def create_device_groups
             Models::DeviceGroup.bulk_create([
               { title: 'Рамка' },
@@ -166,7 +216,7 @@ module OnOff
             (1..device_series_amount).to_a.shuffle.map do |device_series_id|
               skus_dup = skus.dup
 
-              device_series_skus = (1..rand(1..3)).to_a.shuffle.map.with_index do |amount, layer|
+              device_series_skus = (1..rand(1..3)).to_a.shuffle.map do |amount|
                 sku_id = skus_dup.sample
                 skus_dup -= [sku_id]
 
@@ -174,7 +224,6 @@ module OnOff
                   device_series_id: device_series_id,
                   sku_id: sku_id,
                   amount: amount,
-                  layer: layer + 1,
                   unit_price: rand(1..100.0)
                 }
               end

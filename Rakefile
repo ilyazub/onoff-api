@@ -1,6 +1,7 @@
 require 'pry'
 
 require './lib/onoff'
+require './lib/parser'
 
 namespace :db do
   desc "Create database"
@@ -18,9 +19,10 @@ namespace :db do
   end
 
   desc "Reset database"
-  task reset: [ :drop, :create, :seeds ] do
+  task reset: [ :drop, :create, :migrate, :seeds ] do
     # Rake::Task['db:drop']
     # Rake::Task['db:create']
+    # Rake::Task['db:migrate']
     # Rake::Task['db:seeds']
   end
 
@@ -29,6 +31,21 @@ namespace :db do
     require './db/seeds'
 
     seeds_loader = OnOff::API::DB::SeedsLoader.new
+  end
+
+  desc "Import data from spreadsheet to database"
+  task :import, :filename do |task, args|
+    args.with_defaults(filename: 'spreadsheets/DBex.ods')
+
+    parser = OnOff::API::Parser.new
+    parser.parse(args[:filename])
+  end
+
+  desc "Migrate database"
+  task :migrate do
+    DataMapper.finalize
+    DataMapper.auto_migrate!
+    DataMapper.auto_upgrade!
   end
 
   desc "Check for DB existence"

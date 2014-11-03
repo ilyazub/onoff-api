@@ -4,7 +4,7 @@ module OnOff
   module API
     module Entities
       class Manufacturer < Base
-        expose :id, :title, :country, :assembly
+        expose :id, :title, :country
       end
     end
   end

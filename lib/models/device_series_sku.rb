@@ -12,7 +12,6 @@ module OnOff
 
         property :id, Serial, required: true, key: true
         property :amount, Integer, required: true, default: 1
-        property :layer, Integer, required: true, default: 1
         property :unit_price, Float, required: true, default: 0.0
 
         belongs_to :sku, 'SKU', required: true
