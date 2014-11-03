@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
 
+gem 'puma'
+
 gem 'grape'
 gem 'grape-entity'
 gem 'tilt'
