@@ -80,3 +80,13 @@ namespace :db do
     ENV['PGPASSWORD'] = config['password'].to_s
   end
 end
+
+namespace :app do
+  desc "Kill rackup daemon"
+  task :kill do
+    pid_file = File.expand_path('../tmp/pids/rackup.pid', __FILE__)
+    pid = File.read(pid_file).to_i
+    Process.kill 9, pid
+    File.delete pid_file
+  end
+end
