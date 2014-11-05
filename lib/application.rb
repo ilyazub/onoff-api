@@ -1,3 +1,5 @@
+require 'yaml'
+
 module OnOff
   module API
     class Application

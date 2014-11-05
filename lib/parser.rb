@@ -1,3 +1,5 @@
+require 'roo'
+
 module OnOff
   module API
     class Parser

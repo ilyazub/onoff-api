@@ -1,7 +1,5 @@
 if ENV['API_ENV'] != 'production'
   require 'pry'
-  require 'yaml'
-  require 'roo'
 end
 
 require 'data_mapper'
