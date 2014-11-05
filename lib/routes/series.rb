@@ -42,7 +42,8 @@ module OnOff
               get ':title' do
                 device_series_skus = current_cart.devices.device_series.all(series_id: params[:series_id]).device_series_skus
 
-                Tilt::ERBTemplate.new('lib/templates/skus.xls.erb').render(Object.new, cart: current_cart, series_id: params[:series_id], skus: device_series_skus)
+                template = File.expand_path('../../templates/skus.xls.erb', __FILE__)
+                Tilt::ERBTemplate.new(template).render(Object.new, cart: current_cart, series_id: params[:series_id], skus: device_series_skus)
               end
             end
           end
