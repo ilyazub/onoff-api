@@ -73,10 +73,10 @@ namespace :db do
   end
 
   def set_env_vars(config)
-    ENV['PGHOST'] = config['host']
-    ENV['PGPORT'] = config['port'].to_s
+    ENV['PGHOST']     = config['host']
+    ENV['PGPORT']     = config['port'].to_s
     ENV['PGDATABASE'] = config['template']
-    ENV['PGUSER'] = config['username']
+    ENV['PGUSER']     = config['username']
     ENV['PGPASSWORD'] = config['password'].to_s
   end
 end
