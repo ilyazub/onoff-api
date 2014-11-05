@@ -36,9 +36,10 @@ namespace :db do
   desc "Import data from spreadsheet to database"
   task :import, :filename do |task, args|
     args.with_defaults(filename: 'spreadsheets/DBex.ods')
+    file = File.new(args[:filename])
 
     parser = OnOff::API::Parser.new
-    parser.parse(args[:filename])
+    parser.parse(file)
   end
 
   desc "Migrate database"

@@ -9,9 +9,8 @@ module OnOff
         DataMapper.finalize
       end
 
-      def parse(filename)
-        class_name = class_name_from_filename(filename)
-        @sheet = class_name.new(filename)
+      def parse(path)
+        @sheet = create_sheet_from_filename(path)
 
         manufacturers = []
         countries     = []
@@ -76,6 +75,8 @@ module OnOff
 
                     device_series_skus = Models::DeviceSeriesSKU.all(device_series: { series: series }, sku: { :title.like => "%#{parameter_hash[:variable]}%" })
                     device_series_skus.each do |device_series_sku|
+                      device_series_sku.update(unit_price: 0.0)
+
                       sku_parameter = device_series_sku.sku_parameters.first_or_create(parameter: parameter)
                       sku_parameter.sku_values.create(value: created_value, unit_price: rand(1..100.0))
                     end
@@ -91,19 +92,13 @@ module OnOff
         end
       end
 
-      def class_name_from_filename(filename)
-        match = filename.match(/^.*\.(\w+)$/)
-        type = {
-          'ods' => 'OpenOffice',
-          'xls' => 'Excel',
-          'xlsx' => 'Excelx'
-        }
-
-        sheat_class = type[$1]
-        raise ArgumentError.new("Поддерживаются только файлы типа ods, xls, xlsx. Тип твоего файла - #{$1}") if sheat_class.nil?
-
-        class_name = "Roo::#{sheat_class}"
-        Object.const_get(class_name)
+      def create_sheet_from_filename(file)
+        case File.extname(file.path)
+        when '.ods' then Roo::OpenOffice.new(file.path, nil, :ignore)
+        when '.xls' then Roo::Excel.new(file.path, nil, :ignore)
+        when '.xlsx' then Roo::Excelx.new(file.path, nil, :ignore)
+        else raise "Неподдерживаемый тип файла: #{file.path}. Поддерживаются только файлы типа ods, xls, xlsx."
+        end
       end
 
       def parse_device_series(row, device)
