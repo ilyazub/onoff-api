@@ -16,9 +16,9 @@ module OnOff
 
         def create_sheet_from_filename(file)
           case File.extname(file.path)
-          when '.ods' then Roo::OpenOffice.new(file.path)
-          when '.xls' then Roo::Excel.new(file.path)
-          when '.xlsx' then Roo::Excelx.new(file.path)
+          when '.ods' then Roo::OpenOffice.new(file.path, {}, :ignore)
+          when '.xls' then Roo::Excel.new(file.path, {}, :ignore)
+          when '.xlsx' then Roo::Excelx.new(file.path, {}, :ignore)
           else raise "Неподдерживаемый тип файла: #{file.path}. Поддерживаются только файлы типа ods, xls, xlsx."
           end
         end

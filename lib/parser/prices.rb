@@ -6,6 +6,17 @@ module OnOff
       class Prices < Base
         def parse(path)
           super
+
+          is_first_row = true
+          @sheet.each do |row|
+            unless is_first_row
+              compiled_title, type, description, unit_price = row
+
+              Models::SKUValue.all(compiled_title: compiled_title).update(description: description, unit_price: unit_price)
+            end
+
+            is_first_row = false
+          end
         end
       end
     end

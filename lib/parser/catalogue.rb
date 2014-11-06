@@ -68,12 +68,12 @@ module OnOff
                       parameter = Models::Parameter.first_or_create({ series: series, variable: parameter_hash[:variable] }, parameter_hash)
                       created_value = parameter.values.create(code: $1.strip, description: $2.strip, selected: parameter.values.count == 0)
 
-                      device_series_skus = Models::DeviceSeriesSKU.all(device_series: { series: series }, sku: { :title.like => "%#{parameter_hash[:variable]}%" })
+                      device_series_skus = Models::DeviceSeriesSKU.all(device_series: { series: series }, sku: { :title.like => "%#{parameter.variable}%" })
                       device_series_skus.each do |device_series_sku|
                         device_series_sku.update(unit_price: 0.0)
 
                         sku_parameter = device_series_sku.sku_parameters.first_or_create(parameter: parameter)
-                        sku_parameter.sku_values.create(value: created_value, unit_price: rand(1..100.0))
+                        sku_parameter.sku_values.create(value: created_value, compiled_title: device_series_sku.title.sub(parameter.variable, created_value.code), unit_price: rand(1..100.0))
                       end
                     end
                   end

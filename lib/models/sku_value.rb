@@ -9,6 +9,8 @@ module OnOff
       class SKUValue < Base
         include DataMapper::Resource
 
+        property :compiled_title, String, required: true
+        property :description, String
         property :unit_price, Float, required: true, default: 0.0
 
         belongs_to :sku_parameter, 'SKUParameter', key: true, required: true
