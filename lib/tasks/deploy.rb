@@ -61,13 +61,12 @@ namespace :deploy do
 
   def migrate_command
     [
-      "/home/onoff/.rbenv/shims/bundle exec rake db:import"
+      "/home/onoff/.rbenv/shims/bundle exec rake db:migrate"
     ].join(" && ")
   end
 
   def import_data_command
     [
-      "cd #{@deployment_path}",
       "/home/onoff/.rbenv/shims/bundle exec rake db:import"
     ].join(" && ")
   end
