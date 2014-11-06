@@ -49,7 +49,7 @@ module OnOff
                 template = File.expand_path('../templates/skus.xml.erb', File.dirname(__FILE__))
                 rendered_xml = Tilt::ERBTemplate.new(template).render(Object.new, cart: current_cart, series_id: params[:series_id], skus: device_series_skus)
 
-                header "Content-Disposition", "attachment; filename*=UTF-8''#{URI.escape(params[:title])}"
+                header "Content-Disposition", "attachment; filename*=UTF-8''#{URI.escape(params[:title])}.xml"
                 header 'Content-Length', rendered_xml.length.to_s
 
                 rendered_xml
