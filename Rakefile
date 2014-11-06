@@ -1,6 +1,7 @@
 require 'pry'
-
 require './lib/onoff'
+
+Dir["#{File.dirname(__FILE__)}/lib/tasks/*.rb"].each { |file| require file }
 
 namespace :db do
   desc "Create database"
@@ -106,8 +107,11 @@ namespace :app do
   desc "Kill rackup daemon"
   task :kill do
     pid_file = File.expand_path('../tmp/pids/rackup.pid', __FILE__)
-    pid = File.read(pid_file).to_i
-    Process.kill 9, pid
-    File.delete pid_file
+
+    if File.exist?(pid_file)
+      pid = File.read(pid_file).to_i
+      Process.kill 9, pid
+      File.delete pid_file
+    end
   end
 end
