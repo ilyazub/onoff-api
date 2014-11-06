@@ -18,6 +18,10 @@ module OnOff
           }.to_json, 500).finish
       end
 
+      formatter :xml, lambda { |object, env|
+        object
+      }
+
       resource :carts do
         segment '/:cart_id' do
           params do
@@ -35,15 +39,20 @@ module OnOff
                 requires :series_id, type: Integer
               end
 
-              format :txt
-              content_type :txt, 'text/xml'
-              content_type :xls, 'application/vnd.ms-excel'
+              format :xml
+              content_type :txt, 'text/xml; charset=UTF-8'
+              content_type :xml, 'text/xml; charset=UTF-8'
 
               get ':title' do
                 device_series_skus = current_cart.devices.device_series.all(series_id: params[:series_id]).device_series_skus
 
-                template = File.expand_path('../templates/skus.xls.erb', File.dirname(__FILE__))
-                Tilt::ERBTemplate.new(template).render(Object.new, cart: current_cart, series_id: params[:series_id], skus: device_series_skus)
+                template = File.expand_path('../templates/skus.xml.erb', File.dirname(__FILE__))
+                rendered_xml = Tilt::ERBTemplate.new(template).render(Object.new, cart: current_cart, series_id: params[:series_id], skus: device_series_skus)
+
+                header "Content-Disposition", "attachment; filename*=UTF-8''#{URI.escape(params[:title])}"
+                header 'Content-Length', rendered_xml.length.to_s
+
+                rendered_xml
               end
             end
           end
