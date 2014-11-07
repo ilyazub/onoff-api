@@ -11,11 +11,12 @@ namespace :deploy do
   @host = '166.63.124.211'
   @repository = 'git@github.com:ilyazub/onoff-api.git'
   @branch = 'origin/master'
-  @deployment_path = 'websites/onoff-api'
+  @deployment_path = "/home/#{@user}/websites/onoff-api"
 
   desc 'Update code'
   task :update_code do
     remote_task(update_code_command)
+    remote_task(bundle_install_command)
   end
 
   desc 'Restart server'
@@ -52,6 +53,10 @@ namespace :deploy do
     ].join(" && ")
   end
 
+  def bundle_install_command
+    "/home/#{@user}/.rbenv/shims/bundle install --without development test"
+  end
+
   def restart_server_command
     [
       "/home/#{@user}/.rbenv/shims/bundle exec rake app:kill",
@@ -60,14 +65,10 @@ namespace :deploy do
   end
 
   def migrate_command
-    [
-      "/home/#{@user}/.rbenv/shims/bundle exec rake db:migrate"
-    ].join(" && ")
+    "/home/#{@user}/.rbenv/shims/bundle exec rake db:migrate"
   end
 
   def import_data_command
-    [
-      "/home/#{@user}/.rbenv/shims/bundle exec rake db:import"
-    ].join(" && ")
+    "/home/#{@user}/.rbenv/shims/bundle exec rake db:import"
   end
 end

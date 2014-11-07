@@ -1,4 +1,7 @@
-require 'pry'
+if ENV['API_ENV'] != 'production'
+  require 'pry'
+end
+
 require './lib/onoff'
 
 Dir["#{File.dirname(__FILE__)}/lib/tasks/*.rb"].each { |file| require file }
