@@ -1,50 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?mso-application progid="Excel.Sheet"?>
 <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:c="urn:schemas-microsoft-com:office:component:spreadsheet"
-  xmlns:html="http://www.w3.org/TR/REC-html40"
-  xmlns:o="urn:schemas-microsoft-com:office:office"
-  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:x2="http://schemas.microsoft.com/office/excel/2003/xml"
-  xmlns:x="urn:schemas-microsoft-com:office:excel"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
-    <Colors>
-      <Color>
-        <Index>3</Index>
-        <RGB>#c0c0c0</RGB></Color>
-      <Color>
-        <Index>4</Index>
-        <RGB>#ff0000</RGB>
-      </Color>
-    </Colors>
-  </OfficeDocumentSettings>
-  <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
-    <WindowHeight>9000</WindowHeight>
-    <WindowWidth>13860</WindowWidth>
-    <WindowTopX>240</WindowTopX>
-    <WindowTopY>75</WindowTopY>
-    <ProtectStructure>False</ProtectStructure>
-    <ProtectWindows>False</ProtectWindows>
-  </ExcelWorkbook>
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
   <Styles>
-    <Style ss:ID="Default" ss:Name="Normal">
-      <Alignment ss:Vertical="Bottom"/>
-       <Borders/>
-       <Font/>
-       <Interior/>
-       <NumberFormat/>
-       <Protection/>
-    </Style>
     <Style ss:ID="Bold">
       <Font ss:Bold="1" />
     </Style>
     <Style ss:ID="Fixed">
-      <NumberFormat ss:Format="#,##0.00" />
+      <NumberFormat ss:Format="Standard" />
     </Style>
   </Styles>
   <ss:Worksheet ss:Name="Артикулы">
     <Table>
+      <Column ss:Width="75"/>
+      <Column ss:Width="55"/>
+      <Column ss:Width="65"/>
+      <Column ss:Width="35"/>
+
       <Row ss:StyleID="Bold">
         <Cell><Data ss:Type="String">Название</Data></Cell>
         <Cell><Data ss:Type="String">Цена / шт.</Data></Cell>
@@ -52,19 +27,17 @@
         <Cell><Data ss:Type="String">Итого</Data></Cell>
       </Row>
       <% skus.each_with_index do |sku| %>
-        <Row>
-          <Cell><Data ss:Type="String"><%= sku.compiled_title(cart, series_id) %></Data></Cell>
-          <Cell ss:StyleID="Fixed"><Data ss:Type="Number"><%= sku.price_per_unit(cart, series_id) %></Data></Cell>
-          <Cell><Data ss:Type="Number"><%= sku.amount_in_cart(cart) %></Data></Cell>
-          <Cell ss:StyleID="Fixed" ss:Formula="=RC[-2]*RC[-1]"><Data ss:Type="Number" /></Cell>
-        </Row>
+      <Row>
+        <Cell><Data ss:Type="String"><%= sku.compiled_title(cart, series_id) %></Data></Cell>
+        <Cell ss:StyleID="Fixed"><Data ss:Type="Number"><%= sku.price_per_unit(cart, series_id) %></Data></Cell>
+        <Cell><Data ss:Type="Number"><%= sku.amount_in_cart(cart) %></Data></Cell>
+        <Cell ss:StyleID="Fixed" ss:Formula="=RC[-2]*RC[-1]"><Data ss:Type="Number" /></Cell>
+      </Row>
       <% end %>
-      <Row><Cell></Cell></Row>
+      <Row><Cell ss:Index="4"/></Row>
       <Row>
         <Cell ss:StyleID="Bold"><Data ss:Type="String">Итого:</Data></Cell>
-        <Cell><Data/></Cell>
-        <Cell><Data/></Cell>
-        <Cell ss:StyleID="Fixed" ss:Formula="=SUM(R2C:R[-2]C)"><Data ss:Type="Number"></Data></Cell>
+        <Cell ss:Index="4" ss:StyleID="Fixed" ss:Formula="=SUM(R2C:R[-2]C)"><Data ss:Type="Number"></Data></Cell>
       </Row>
     </Table>
   </ss:Worksheet>
