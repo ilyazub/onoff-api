@@ -1,6 +1,4 @@
-if ENV['API_ENV'] != 'production'
-  require 'pry'
-end
+require 'pry' unless ENV['API_ENV'] == 'production'
 
 require './lib/onoff'
 
