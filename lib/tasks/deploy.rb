@@ -38,7 +38,7 @@ namespace :deploy do
   end
 
   def source_profile
-    "source /home/onoff/.profile"
+    "source /home/#{@user}/.profile"
   end
 
   def change_dir
@@ -54,20 +54,20 @@ namespace :deploy do
 
   def restart_server_command
     [
-      "/home/onoff/.rbenv/shims/bundle exec rake app:kill",
-      "/home/onoff/.rbenv/shims/bundle exec rackup -D"
+      "/home/#{@user}/.rbenv/shims/bundle exec rake app:kill",
+      "/home/#{@user}/.rbenv/shims/bundle exec rackup -D"
     ].join(" && ")
   end
 
   def migrate_command
     [
-      "/home/onoff/.rbenv/shims/bundle exec rake db:migrate"
+      "/home/#{@user}/.rbenv/shims/bundle exec rake db:migrate"
     ].join(" && ")
   end
 
   def import_data_command
     [
-      "/home/onoff/.rbenv/shims/bundle exec rake db:import"
+      "/home/#{@user}/.rbenv/shims/bundle exec rake db:import"
     ].join(" && ")
   end
 end
