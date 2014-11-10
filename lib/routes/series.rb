@@ -1,3 +1,5 @@
+require_relative '../skus_response/xml_response_wrapper'
+
 module OnOff
   module API
     class Series < Grape::API
@@ -18,10 +20,6 @@ module OnOff
           }.to_json, 500).finish
       end
 
-      formatter :xml, lambda { |object, env|
-        object
-      }
-
       resource :carts do
         segment '/:cart_id' do
           params do
@@ -40,19 +38,20 @@ module OnOff
               end
 
               format :xml
-              content_type :txt, 'text/xml; charset=UTF-8'
-              content_type :xml, 'text/xml; charset=UTF-8'
+              content_type :txt, 'application/xml; charset=UTF-8'
+              content_type :xml, 'application/xml; charset=UTF-8'
 
-              get ':title' do
-                device_series_skus = current_cart.devices.device_series.all(series_id: params[:series_id]).device_series_skus
+              get do
+                series = Models::Series.get(params[:series_id])
+                device_series_skus = current_cart.devices.device_series.all(series: series).device_series_skus
 
                 template = File.expand_path('../templates/skus.xml.erb', File.dirname(__FILE__))
-                rendered_xml = Tilt::ERBTemplate.new(template).render(Object.new, cart: current_cart, series_id: params[:series_id], skus: device_series_skus)
+                rendered_template =  Tilt::ERBTemplate.new(template).render(Object.new, cart: current_cart, series_id: params[:series_id], skus: device_series_skus)
 
-                header 'Content-Disposition', "attachment; filename*=UTF-8''#{URI.escape(params[:title])}.xml"
-                header 'Content-Length', rendered_xml.length.to_s
+                header 'Content-Disposition', "attachment; filename*=UTF-8''#{URI.escape(series.title)}.xml"
+                header 'Content-Length', rendered_template.length
 
-                rendered_xml
+                XmlResponseWrapper.new(rendered_template)
               end
             end
           end
