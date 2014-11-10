@@ -12,6 +12,7 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
+        property :code, String, required: true, unique: true
         property :title, String, required: true, unique: true
 
         belongs_to :device_group, required: true

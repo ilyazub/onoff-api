@@ -13,6 +13,11 @@ namespace :deploy do
   @branch = 'origin/master'
   @deployment_path = "/home/#{@user}/websites/onoff-api"
 
+  desc 'Setup folder'
+  task :setup do
+    remote_task(create_folder_if_not_exists)
+  end
+
   desc 'Update code'
   task :update_code do
     remote_task(update_code_command)
@@ -34,7 +39,7 @@ namespace :deploy do
     remote_task(import_data_command)
   end
 
-  def remote_task(command)
+  def remote_task(command, options = {})
     sh "ssh #{@user}@#{@host} \"#{source_profile} && #{change_dir} && #{command}\""
   end
 
@@ -44,6 +49,10 @@ namespace :deploy do
 
   def change_dir
     "cd #{@deployment_path}"
+  end
+
+  def create_folder_if_not_exists
+    "mkdir -p #{@deployment_path}"
   end
 
   def update_code_command

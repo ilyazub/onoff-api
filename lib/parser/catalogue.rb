@@ -21,15 +21,15 @@ module OnOff
             case row[0]
             when 'Производитель'
               manufacturers_found = true
-              manufacturers = row.drop(1)
+              manufacturers = row.drop(2)
             when 'Страна'
               countries_found = true
-              countries = row.drop(1)
+              countries = row.drop(2)
             when 'Наименование/Серия'
               raise ArgumentError.new('Производители не заданы') unless manufacturers_found
               raise ArgumentError.new('Страны производителей не заданы') unless countries_found
 
-              series = row.drop(1)
+              series = row.drop(2)
               series.each_with_index do |title, index|
                 manufacturer = Models::Manufacturer.first_or_create(title: manufacturers[index].strip, country: countries[index].strip)
                 Models::Series.create(title: title.strip, manufacturer: manufacturer)
@@ -50,7 +50,7 @@ module OnOff
                 device_found = true
 
                 device_group = Models::DeviceGroup.last
-                device = Models::Device.create(title: row[0].strip, device_group: device_group) # Первая ячейка - название устройства
+                device = Models::Device.create(code: row[0].strip, title: row[1].strip, device_group: device_group) # Первая ячейка - название устройства
 
                 parse_device_series(row, device)
               elsif option_found
@@ -61,9 +61,9 @@ module OnOff
                   device = Models::Device.last
                   parse_device_series(row, device)
                 elsif parameter_hash
-                  values = row.drop(1)
+                  values = row.drop(2)
                   values.each_with_index do |value, index|
-                    if value =~ /^([\d\w]+)[\s]*-[\s]*(.*)$/ # Если значение задано и оно в правильном формате
+                    if value =~ /^([\d\w-]+)[\s]*[-:][\s]*(.*)$/ # Если значение задано и оно в правильном формате
                       series = Models::Series.get(index + 1)
                       parameter = Models::Parameter.first_or_create({ series: series, variable: parameter_hash[:variable] }, parameter_hash)
                       created_value = parameter.values.create(code: $1.strip, description: $2.strip, selected: parameter.values.count == 0)
@@ -87,17 +87,8 @@ module OnOff
           end
         end
 
-        def create_sheet_from_filename(file)
-          case File.extname(file.path)
-          when '.ods' then Roo::OpenOffice.new(file.path, nil, :ignore)
-          when '.xls' then Roo::Excel.new(file.path, nil, :ignore)
-          when '.xlsx' then Roo::Excelx.new(file.path, nil, :ignore)
-          else raise "Неподдерживаемый тип файла: #{file.path}. Поддерживаются только файлы типа ods, xls, xlsx."
-          end
-        end
-
         def parse_device_series(row, device)
-          skus = row.drop(1)
+          skus = row.drop(2)
           skus.each_with_index do |title, index|
             if title && title.match(/^Опция[\s]*(.*)$/).nil? # Опции пропустить, т.к. они пока не поддерживаются
               device_series = Models::DeviceSeries.first_or_create(device: device, series: Models::Series.get(index + 1)) # Создать серию устройств
