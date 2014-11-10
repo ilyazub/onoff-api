@@ -20,8 +20,10 @@ namespace :deploy do
 
   desc 'Update code'
   task :update_code do
-    remote_task(update_code_command)
-    remote_task(bundle_install_command)
+    remote_task([
+      update_code_command,
+      bundle_install_command
+    ])
   end
 
   desc 'Restart server'
@@ -39,8 +41,11 @@ namespace :deploy do
     remote_task(import_data_command)
   end
 
-  def remote_task(command, options = {})
-    sh "ssh #{@user}@#{@host} \"#{source_profile} && #{change_dir} && #{command}\""
+  def remote_task(commands, options = {})
+    commands = Array(commands)
+    commands.each do |command|
+      sh "ssh #{@user}@#{@host} \"#{source_profile} && #{change_dir} && #{command}\""
+    end
   end
 
   def source_profile
