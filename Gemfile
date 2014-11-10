@@ -10,12 +10,13 @@ gem 'grape-entity'
 gem 'tilt'
 gem 'rack-cors', require: 'rack/cors'
 
+gem 'roo'
+
 group :development, :test do
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-stack_explorer'
 
-  gem 'roo'
 end
 
 group :test do
