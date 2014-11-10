@@ -9,12 +9,14 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
-        property :title, String, required: true, unique: true
-        property :country, String, required: true
+        property :title, String, required: true, unique_index: :unique_manufacturer
+        property :country, String, required: true, unique_index: :unique_manufacturer
 
         has n, :series, 'Series'
 
         timestamps :at
+
+        validates_uniqueness_of :title, scope: :country, message: "There's already a manufacturer of that title in this country"
 
         Entity = Entities::Manufacturer
       end

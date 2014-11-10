@@ -90,10 +90,12 @@ module OnOff
         def parse_device_series(row, device)
           skus = row.drop(2)
           skus.each_with_index do |title, index|
+            title = String(title)
+
             if title && title.match(/^Опция[\s]*(.*)$/).nil? # Опции пропустить, т.к. они пока не поддерживаются
               device_series = Models::DeviceSeries.first_or_create(device: device, series: Models::Series.get(index + 1)) # Создать серию устройств
 
-              title =~ /^(.*)\*(\d)$/
+              title =~ /^(.*)\*(\d)+(?:.*)?$/
               title = $1 || title
               amount = $2 || 1
 
