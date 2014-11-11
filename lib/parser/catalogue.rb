@@ -99,7 +99,7 @@ module OnOff
             amount = $2 || 1
 
             sku = Models::SKU.first_or_create(title: title.strip)
-            Models::DeviceSeriesSKU.create(sku: sku, device_series: device_series, amount: amount.to_i, unit_price: rand(1..100.0))
+            Models::DeviceSeriesSKU.create(sku: sku, device_series: device_series, amount: amount.to_i, unit_price: 0.0)
           end
         end
 
@@ -116,7 +116,7 @@ module OnOff
                 device_series_sku.update(unit_price: 0.0)
 
                 sku_parameter = device_series_sku.sku_parameters.first_or_create(parameter: parameter)
-                sku_parameter.sku_values.create(value: created_value, compiled_title: device_series_sku.title.sub(parameter.variable, created_value.code), unit_price: rand(1..100.0))
+                sku_parameter.sku_values.create(value: created_value, compiled_title: device_series_sku.title.sub(parameter.variable, created_value.code), unit_price: 0.0)
               end
             end
           end

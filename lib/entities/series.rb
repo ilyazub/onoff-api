@@ -10,7 +10,7 @@ module OnOff
         expose :id, :title
 
         expose :manufacturer, using: Manufacturer
-        expose :parameters, using: Parameter
+        expose :devices_parameters, as: :parameters, using: Parameter
         expose :device_series_skus, as: :skus, using: DeviceSeriesSKU
       end
     end

@@ -1,4 +1,4 @@
-RSpec.describe OnOff::API::Parser::Catalogue, :focus do
+RSpec.describe OnOff::API::Parser::Catalogue do
   subject { OnOff::API::Parser::Catalogue.new }
 
   describe '#parse_sku' do

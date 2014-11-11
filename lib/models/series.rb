@@ -28,6 +28,10 @@ module OnOff
           @devices = devices
         end
 
+        def devices_parameters
+          parameters.all(sku_parameters: device_series_skus.sku_parameters)
+        end
+
         def device_series_skus
           device_series.all(device: @devices).device_series_skus
         end
