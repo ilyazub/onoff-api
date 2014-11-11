@@ -1,13 +1,15 @@
 ENV['API_ENV'] = 'test'
 
-require File.expand_path '../../lib/onoff', __FILE__
+[ '../lib/onoff', '../lib/parser/catalogue.rb', '../lib/parser/prices.rb' ].each do |file|
+  require File.expand_path(file, File.dirname(__FILE__))
+end
 
 require 'rack/test'
 require 'database_cleaner'
 require 'rspec/expectations'
 require 'dm-rspec'
 
-Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |file| require file }
 
 module RSpecMixin
   include Rack::Test::Methods

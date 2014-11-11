@@ -7,6 +7,9 @@ module OnOff
       class CartItem < Base
         expose :id, :amount
 
+        expose :updated_at, as: :updatedAt
+        expose :created_at, as: :createdAt
+
         expose :device, using: Device
       end
     end

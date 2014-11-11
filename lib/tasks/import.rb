@@ -27,5 +27,12 @@ namespace :db do
       parser = OnOff::API::Parser::Prices.new
       parser.parse(file)
     end
+
+    desc 'Check matching of SKU titles in price-list and compiled titles in catalogue'
+    task :check_matches do
+      unique_compiled_titles = OnOff::API::Models::SKUValue.distinct(:compiled_title).map(&:compiled_title)
+
+      File.open('tmp/unique_compiled_titles.txt', 'w+') { |f| f.write(unique_compiled_titles.join("\r\n")) }
+    end
   end
 end
