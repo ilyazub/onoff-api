@@ -7,8 +7,9 @@ module OnOff
         PATTERNS = {
           MANUFACTURER: /^Производитель$/,
           COUNTRY:      /^Страна$/,
-          DEVICE_GROUP: /^Группа устройств[\:]?[\s]*([А-Яа-я]+)$/,
-          PARAMETER:    /^Параметр[\s]*(.*)[\s]*-[\s]*(.*)$/,
+          SERIES:       /^Наименование\/[\s]*Серия$/,
+          DEVICE_GROUP: /^Группа устройств[\:]?[\s]*([А-Яа-я]+)$/,  # Заголовок группы устройств
+          PARAMETER:    /^Параметр[\s]*(.*)[\s]*-[\s]*(.*)$/,       # Строка с названием параметра
           OPTION:       /^Опция[\s]*(.*)$/,
           SKU:          /^(.*)[\s]*\*[\s]*(\d)+(?:.*)?$/,
           VALUE:        /^([\d\w-]+)[\s]*[-:][\s]*(.*)$/
@@ -29,13 +30,13 @@ module OnOff
 
           @sheet.each do |row|
             case row[0]
-            when 'Производитель'
+            when PATTERNS[:MANUFACTURER]
               manufacturers_found = true
               manufacturers = row.drop(2)
-            when 'Страна'
+            when PATTERNS[:COUNTRY]
               countries_found = true
               countries = row.drop(2)
-            when 'Наименование/Серия'
+            when PATTERNS[:SERIES]
               raise ArgumentError.new('Производители не заданы') unless manufacturers_found
               raise ArgumentError.new('Страны производителей не заданы') unless countries_found
 
@@ -44,17 +45,17 @@ module OnOff
                 manufacturer = Models::Manufacturer.first_or_create(title: manufacturers[index].strip, country: countries[index].strip)
                 Models::Series.create(title: title.strip, manufacturer: manufacturer)
               end
-            when /^Группа устройств[\:]?[\s]*([А-Яа-я]+)$/ # Заголовок группы устройств
+            when PATTERNS[:DEVICE_GROUP]
               raise ArgumentError.new('Серии не заданы') if Models::Series.count == 0
 
               device_group_found = true
               Models::DeviceGroup.create(title: $1.strip)
-            when /^Параметр[\s]*(.*)[\s]*-[\s]*(.*)$/ # Строка с названием параметра
+            when PATTERNS[:PARAMETER]
               device_group_found = false
               device_found = false
 
               parameter_hash = { variable: $1.strip, description: $2.strip }
-            when /^Опция[\s]*(.*)$/ # Опции пропустить, т.к. они пока не поддерживаются
+            when PATTERNS[:OPTION] # Опции пропустить, т.к. они пока не поддерживаются
             when String
               if device_group_found # Строка между началом и концом группы устройств
                 device_found = true
@@ -90,10 +91,10 @@ module OnOff
         def parse_sku(device, title, index)
           return if String(title).strip == '' # Пропустить пустую ячейку
 
-          if title.match(/^Опция[\s]*(.*)$/).nil? # Опции пропустить, т.к. они пока не поддерживаются
+          if title.match(PATTERNS[:OPTION]).nil? # Опции пропустить, т.к. они пока не поддерживаются
             device_series = Models::DeviceSeries.first_or_create(device: device, series: Models::Series.get(index + 1)) # Создать серию устройств
 
-            title =~ /^(.*)[\s]*\*[\s]*(\d)+(?:.*)?$/
+            title =~ PATTERNS[:SKU]
             title = $1 || title
             amount = $2 || 1
 
@@ -105,7 +106,7 @@ module OnOff
         def parse_values(row, parameter_hash)
           values = row.drop(2)
           values.each_with_index do |value, index|
-            if value =~ /^([\d\w-]+)[\s]*[-:][\s]*(.*)$/ # Если значение задано и оно в правильном формате
+            if value =~ PATTERNS[:VALUE] # Если значение задано в правильном формате
               series = Models::Series.get(index + 1)
               parameter = Models::Parameter.first_or_create({ series: series, variable: parameter_hash[:variable] }, parameter_hash)
               created_value = parameter.values.create(code: $1.strip, description: $2.strip, selected: parameter.values.count == 0)
