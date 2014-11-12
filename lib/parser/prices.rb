@@ -13,6 +13,7 @@ module OnOff
               compiled_title, type, description, unit_price = row
 
               Models::SKUValue.all(compiled_title: compiled_title).update(description: description, unit_price: unit_price)
+              Models::DeviceSeriesSKU.all(sku: { title: compiled_title }).update(unit_price: unit_price)
             end
 
             is_first_row = false
