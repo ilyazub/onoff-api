@@ -12,7 +12,7 @@ module OnOff
         property :title, String, required: true, unique_index: :unique_manufacturer
         property :country, String, required: true, unique_index: :unique_manufacturer
 
-        has n, :series, 'Series'
+        has n, :series, 'Series', constraint: :destroy
 
         timestamps :at
 
