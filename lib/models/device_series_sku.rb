@@ -51,14 +51,6 @@ module OnOff
           price_per_unit(cart, series_id) * amount_in_cart(cart)
         end
 
-        def self.amount_in_cart(cart)
-          inject(0) { |amount, sku| amount + sku.amount_in_cart(cart) }
-        end
-
-        def self.price(cart, series_id)
-          inject(0) { |price, sku| price + sku.price(cart, series_id) }
-        end
-
         def title() sku.title end
         def device_id() device.id end
         def device() device_series.device end
