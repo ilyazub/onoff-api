@@ -14,6 +14,17 @@ module OnOff
         put '/:id' do
           present Models::Cart.get_or_create(params[:id])
         end
+
+        desc 'Removes all items from cart'
+        params do
+          requires :id, type: String, desc: 'UUID of the cart'
+        end
+        delete '/:id' do
+          cart = Models::Cart.get_or_create(params[:id])
+          cart.cart_items.destroy
+
+          present cart
+        end
       end
     end
   end
