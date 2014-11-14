@@ -33,15 +33,15 @@ module OnOff
             case row[0]
             when PATTERNS[:MANUFACTURER]
               manufacturers_found = true
-              manufacturers = row.drop(2)
+              manufacturers = row.drop(3)
             when PATTERNS[:COUNTRY]
               countries_found = true
-              countries = row.drop(2)
+              countries = row.drop(3)
             when PATTERNS[:SERIES]
               raise ArgumentError.new('Производители не заданы') unless manufacturers_found
               raise ArgumentError.new('Страны производителей не заданы') unless countries_found
 
-              series = row.drop(2)
+              series = row.drop(3)
               series.each_with_index do |title, index|
                 manufacturer = Models::Manufacturer.first_or_create(title: manufacturers[index].strip, country: countries[index].strip)
                 Models::Series.create(title: title.strip, manufacturer: manufacturer)
@@ -62,7 +62,7 @@ module OnOff
                 device_found = true
 
                 device_group = Models::DeviceGroup.last
-                device = Models::Device.create(code: row[0].strip, title: row[1].strip, device_group: device_group) # Первая ячейка - название устройства
+                device = Models::Device.create(code: row[0].strip, display_on_page: row[1].to_i == 1, title: row[2].strip, device_group: device_group) # Первая ячейка - название устройства
 
                 parse_device_series(row, device)
               elsif option_found
@@ -85,7 +85,7 @@ module OnOff
         end
 
         def parse_device_series(row, device)
-          skus = row.drop(2)
+          skus = row.drop(3)
           skus.each_with_index { |title, index| parse_sku(device, title, index) }
         end
 
@@ -105,7 +105,7 @@ module OnOff
         end
 
         def parse_values(row, parameter_hash)
-          values = row.drop(2)
+          values = row.drop(3)
           values.each_with_index do |value, index|
             if value =~ PATTERNS[:VALUE] # Если значение задано в правильном формате
               series = Models::Series.get(index + 1)
