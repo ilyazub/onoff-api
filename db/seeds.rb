@@ -1,4 +1,4 @@
-Dir["#{File.dirname(__FILE__) }/../lib/models/*.rb"].each { |file| require file }
+Dir["#{File.dirname(__FILE__) }/../lib/models/*.rb"].each { |f| require f }
 
 module OnOff
   module API

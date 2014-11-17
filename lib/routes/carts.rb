@@ -22,6 +22,7 @@ module OnOff
         delete '/:id' do
           cart = Models::Cart.get_or_create(params[:id])
           cart.cart_items.destroy
+          cart.selected_values.destroy
 
           present cart
         end
