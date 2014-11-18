@@ -1,0 +1,15 @@
+language: ruby
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.0
+env:
+  - API_ENV=test
+addons:
+  postgresql: "9.3"
+before_script:
+  - bundle exec rake db:drop db:create db:migrate
+notifications:
+  email: false
+# uncomment this line if your project needs to run something other than `rake`:
+# script: bundle exec rspec spec
