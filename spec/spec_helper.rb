@@ -8,6 +8,7 @@ require 'rack/test'
 require 'database_cleaner'
 require 'rspec/expectations'
 require 'dm-rspec'
+require 'factory_girl'
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |file| require file }
 
@@ -61,6 +62,7 @@ RSpec.configure do |config|
     end
 
     config.include RSpecMixin
-    config.include(DataMapper::Matchers)
+    config.include DataMapper::Matchers
+    config.include FactoryGirl::Syntax::Methods
   end
 end

@@ -12,7 +12,9 @@ module OnOff
           requires :id, type: String, desc: 'UUID of the cart'
         end
         put '/:id' do
-          present Models::Cart.get_or_create(params[:id])
+          cart = Models::Cart.get_or_create(params[:id])
+          cart.update(updated_at: Time.now)
+          present cart
         end
 
         desc 'Removes all items from cart'

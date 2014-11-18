@@ -41,6 +41,7 @@ module OnOff
               content_type :txt, 'application/xml; charset=UTF-8'
               content_type :xml, 'application/xml; charset=UTF-8'
 
+              desc 'Download SKUs list of selected series in current cart'
               get do
                 series = Models::Series.get(params[:series_id])
                 device_series_skus = current_cart.devices.device_series.all(series: series).device_series_skus
