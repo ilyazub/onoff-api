@@ -62,7 +62,7 @@ module OnOff
                 device_found = true
 
                 device_group = Models::DeviceGroup.last
-                device = Models::Device.create(code: row[0].strip, display_on_page: row[1].to_i == 1, order_number: row[2].to_i, title: row[3].strip, device_group: device_group) # Первая ячейка - название устройства
+                device = Models::Device.create(code: row[0].strip, display_on_page: row[1].to_i == 1, index: row[2].to_i, title: row[3].strip, device_group: device_group) # Первая ячейка - название устройства
 
                 parse_device_series(row, device)
               elsif option_found
