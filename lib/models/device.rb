@@ -13,8 +13,9 @@ module OnOff
 
         property :id, Serial, key: true, required: true
         property :code, String, required: true, unique_index: :unique_device
-        property :title, String, required: true, unique_index: :unique_device
         property :display_on_page, Boolean, required: true, default: true
+        property :order_number, Integer, required: true, default: 0
+        property :title, String, required: true, unique_index: :unique_device
 
         belongs_to :device_group, required: true
 
