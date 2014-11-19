@@ -46,12 +46,19 @@ FactoryGirl.define do
     sequence(:title) { |n| "Series ##{n}" }
   end
 
-  factory :parameter do
+  factory :parameter, class: OnOff::API::Models::Parameter do
     series
+
+    sequence(:variable) { |n| "Variable #{n}"}
+    sequence(:description) { |n| "Description #{n}"}
   end
 
-  factory :value do
+  factory :value, class: OnOff::API::Models::Value do
     parameter
+
+    sequence(:code) { |n| "Code #{n}"}
+    sequence(:description) { |n| "Description #{n}"}
+    selected { rand > 0.5 }
   end
 
   factory :device_series, class: OnOff::API::Models::DeviceSeries do
@@ -71,14 +78,17 @@ FactoryGirl.define do
     unit_price  { rand(1..100.0) }
   end
 
-  factory :sku_parameter do
+  factory :sku_parameter, class: OnOff::API::Models::SKUParameter do
+    device_series_sku
     parameter
   end
 
-  factory :sku_value do
+  factory :sku_value, class: OnOff::API::Models::SKUValue do
     sku_parameter
     value
 
+    sequence(:compiled_title) { |n| "Compiled title #{n}"}
+    sequence(:description) { |n| "Description #{n}"}
     unit_price  { rand(1..100.0) }
   end
 end
