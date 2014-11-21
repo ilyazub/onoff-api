@@ -10,17 +10,12 @@ module OnOff
           DataMapper.finalize
         end
 
-        def parse(path)
-          @sheet = create_sheet_from_filename(path)
+        def parse(file, options = {})
+          @sheet = create_sheet_from_file(file, options)
         end
 
-        def create_sheet_from_filename(file)
-          case File.extname(file.path)
-          when '.ods' then Roo::OpenOffice.new(file.path, {}, :ignore)
-          when '.xls' then Roo::Excel.new(file.path, {}, :ignore)
-          when '.xlsx' then Roo::Excelx.new(file.path, {}, :ignore)
-          else raise "Неподдерживаемый тип файла: #{file.path}. Поддерживаются только файлы типа ods, xls, xlsx."
-          end
+        def create_sheet_from_file(file, options)
+          Roo::Spreadsheet.open(file, options)
         end
       end
     end

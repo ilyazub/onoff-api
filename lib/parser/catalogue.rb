@@ -5,18 +5,18 @@ module OnOff
     module Parser
       class Catalogue < Base
         PATTERNS = {
-          MANUFACTURER:   /^Производитель$/,
-          COUNTRY:        /^Страна$/,
-          SERIES:         /^Наименование\/[\s]*Серия$/,
-          DEVICE_GROUP:   /^Группа устройств[\:]?[\s]*([А-Яа-я]+)$/,  # Заголовок группы устройств
-          PARAMETER:      /^Параметр[\s]*(.*)[\s]*-[\s]*(.*)$/,       # Строка с названием параметра
-          OPTION:         /^Опция[\s]*(.*)$/,
-          SKU:            /^(.*)[\s]*\*[\s]*(\d)+(?:.*)?$/,
-          VALUE:          /^([\d\w-]+)[\s]*[-:][\s]*(.*)$/,
-          INVALID_VALUE:  /^(\d*[а-яА-Я]+\d*)[\s]*[-:][\s]*(.*)$/
+          MANUFACTURER:   /\AПроизводитель\z/,
+          COUNTRY:        /\AСтрана\z/,
+          SERIES:         /\AНаименование\/[\s]*Серия\z/,
+          DEVICE_GROUP:   /\AГруппа устройств[\:]?[\s]*([А-Яа-я]+)\z/,  # Заголовок группы устройств
+          PARAMETER:      /\AПараметр[\s]*(.*)[\s]*-[\s]*(.*)\z/,       # Строка с названием параметра
+          OPTION:         /\AОпция[\s]*(.*)\z/,
+          SKU:            /\A(.*)[\s]*\*[\s]*(\d)+(?:.*)?\z/,
+          VALUE:          /\A([\d\w-]+)[\s]*[-:][\s]*(.*)\z/,
+          INVALID_VALUE:  /\A(\d*[а-яА-Я]+\d*)[\s]*[-:][\s]*(.*)\z/
         }
 
-        def parse(path)
+        def parse(file, options = {})
           super
 
           manufacturers = []

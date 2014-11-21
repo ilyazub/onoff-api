@@ -4,7 +4,7 @@ module OnOff
   module API
     module Parser
       class Prices < Base
-        def parse(path)
+        def parse(file, options = {})
           super
 
           is_first_row = true
