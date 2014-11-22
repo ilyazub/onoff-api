@@ -1,5 +1,6 @@
 require 'dm-timestamps'
 require 'dm-constraints'
+require 'dm-aggregates'
 
 module OnOff
   module API
