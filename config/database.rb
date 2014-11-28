@@ -1,4 +1,4 @@
-DataMapper::Logger.new($stdout, :debug)
+DataMapper::Logger.new(OnOff::API.application.logfile, :debug)
 
 DataMapper.setup(:default, OnOff::API.application.connection_string)
 

@@ -3,10 +3,14 @@ require 'yaml'
 module OnOff
   module API
     class Application
-      attr_accessor :config, :env, :database
+      attr_accessor :config, :env, :database, :root, :logfile
 
       def initialize
         @env = ENV['API_ENV'] ||= 'development'
+        @root = File.dirname(File.dirname(__FILE__))
+
+        @logfile = File.new("#{root}/log/#{env}.log", 'a+')
+        @logfile.sync = true
 
         @config = {
           database: YAML.load(Tilt::ERBTemplate.new('./config/database.yaml').render(binding))

@@ -1,5 +1,3 @@
-#\ -s puma -P tmp/pids/rackup.pid
-
 require './lib/onoff'
 
 require 'rack/cors'
@@ -10,6 +8,8 @@ use Rack::Cors do
     resource '*', headers: :any, methods: [ :get, :post, :put, :delete, :options ]
   end
 end
+
+# use Rack::CommonLogger, OnOff::API.application.logfile
 
 use Rack::Deflater
 
