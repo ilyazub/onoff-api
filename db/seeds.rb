@@ -27,9 +27,6 @@ module OnOff
 
           create_sku_parameters
           create_sku_values
-
-          # create_tags
-          # create_taggings
         end
 
         private
@@ -106,17 +103,6 @@ module OnOff
 
             Models::Device.bulk_create([
               { title: 'Рамка 1-ая',            device_group: frames },
-              # { title: 'Рамка 2-ая',            device_group: frames },
-              # { title: 'Рамка 3-ая',            device_group: frames },
-              # { title: 'Рамка 4-ая',            device_group: frames },
-              # { title: 'Рамка 5-ая',            device_group: frames },
-              # { title: 'Розетка',               device_group: sockets },
-              # { title: 'Розетка с крышкой',     device_group: sockets },
-              # { title: 'Розетка ТВ',            device_group: sockets },
-              # { title: 'Розетка ТВ+Спутник',    device_group: sockets },
-              # { title: 'Розетка компьютерная',  device_group: sockets },
-              # { title: 'Розетка телефонная',    device_group: sockets },
-              # { title: 'Выключатель 1 кл.',     device_group: switches },
               { title: 'Выключатель 2 кл.',     device_group: switches },
               { title: 'Диммер поворотный',     device_group: dimmers }
             ])
@@ -133,15 +119,9 @@ module OnOff
 
             Models::Series.bulk_create([
               { title: 'Basic 55', manufacturer: manufacturer },
-              # { title: 'Busch-Duro Reflex', manufacturer: manufacturer },
-              # { title: 'Spring', manufacturer: manufacturer },
-              # { title: 'Alpha', manufacturer: manufacturer },
-              # { title: 'Future/Future Linear', manufacturer: manufacturer },
               { title: 'Solo', manufacturer: manufacturer },
               { title: 'Axcent', manufacturer: manufacturer },
-              # { title: 'Impuls', manufacturer: manufacturer },
-              # { title: 'Steel', manufacturer: manufacturer },
-              # { title: 'Carat', manufacturer: manufacturer }
+              { title: 'Carat', manufacturer: manufacturer }
             ])
           end
 
@@ -167,43 +147,7 @@ module OnOff
               { title: "5550 #{@variable_pattern}" },
               { title: "0209-507" },
               { title: "N2288.1 #{@variable_pattern}" },
-              # { title: "N2271.9" },
-              # { title: "0213-507" },
-              { title: "1803-#{@variable_pattern}" },
-              # { title: "2006/6 UC-#{@variable_pattern}-507" },
-              # { title: "2000/6 US" },
-              # { title: "2001/6 U-507  " },
-              # { title: "2000/6 US-507" },
-              # { title: "2506-#{@variable_pattern}" },
-              # { title: "1786-#{@variable_pattern}" },
-              # { title: "2006/1 UCGL-#{@variable_pattern}" },
-              # { title: "2000/1 US" },
-              # { title: "2001/6 U-507" },
-              # { title: "2000/1 US-500" },
-              # { title: "2509-#{@variable_pattern}-500" },
-              # { title: "1789-#{@variable_pattern}" },
-              # { title: "1786-#{@variable_pattern}-507" },
-              # { title: "1721-#{@variable_pattern}" },
-              # { title: "3916-12221" },
-              # { title: "5518G-A03449 #{@variable_pattern}" },
-              # { title: "5518A-A3449 #{@variable_pattern}" },
-              # { title: "5518M-A03459 #{@variable_pattern}" },
-              # { title: "5518E-A03459 #{@variable_pattern}" },
-              # { title: "1228.01 RJ 12-6" },
-              # { title: "5013U-A01105" },
-              # { title: "5014G-A01018 #{@variable_pattern}" },
-              # { title: "5013A-A00215 #{@variable_pattern}" },
-              # { title: "5014M-A00100 #{@variable_pattern}" },
-              # { title: "5013E-A00215 #{@variable_pattern}" },
-              # { title: "5014M-B01018" },
-              # { title: "3557-A01440" },
-              # { title: "3558-A01440" },
-              # { title: "3559-A01445" },
-              # { title: "3557G-A00651 #{@variable_pattern}" },
-              # { title: "3558A-A651 #{@variable_pattern}" },
-              # { title: "3559M-A00651 #{@variable_pattern}" },
-              # { title: "3558E-A00651 #{@variable_pattern}" },
-              # { title: "2516-3-507" }
+              { title: "1803-#{@variable_pattern}" }
             ]
 
             Models::SKU.bulk_create(skus)
@@ -267,13 +211,6 @@ module OnOff
               { code: '281', description: 'Слоновая кость' },
               { code: '284', description: 'Серебро' },
               { code: '286', description: 'Белый бархат' },
-              # { code: '288', description: 'Белый' },
-              # { code: '295', description: 'Бежевый' },
-              # { code: '296', description: 'Серый' },
-              # { code: '297', description: 'Бордовый' },
-              # { code: '299', description: 'Голубой' },
-              # { code: '84',  description: 'Кирпичный' },
-              # { code: '896', description: 'Дымчатый' }
             ]
 
             parameters.shuffle.map do |parameter|
@@ -323,29 +260,6 @@ module OnOff
 
               Models::SKUValue.bulk_create(sku_values)
             end
-          end
-
-          def create_tags
-            Models::Tag.bulk_create([
-              { title: 'Классический дизайн' },
-              { title: 'Натуральные материалы' }
-            ])
-          end
-
-          def create_taggings
-            tags_amount = Models::Tag.count
-            device_series_amount = Models::DeviceSeries.count
-
-            taggings = (1..device_series_amount).to_a.shuffle.map do |device_series|
-              (1..tags_amount).to_a.shuffle.map do |tag|
-                {
-                  tag_id: tag,
-                  device_series_id: device_series
-                }
-              end
-            end.flatten
-
-            Models::Tagging.bulk_create(taggings)
           end
       end
     end

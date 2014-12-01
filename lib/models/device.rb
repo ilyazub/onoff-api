@@ -12,10 +12,10 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, key: true, required: true
-        property :code, String, required: true, unique_index: :unique_device
+        property :code, String, required: true
         property :display_on_page, Boolean, required: true, default: true
         property :index, Integer, required: true, default: 0
-        property :title, String, required: true, unique_index: :unique_device
+        property :title, String, required: true
 
         belongs_to :device_group, required: true
 
@@ -25,8 +25,6 @@ module OnOff
         has n, :series, through: :device_series
 
         timestamps :at
-
-        validates_uniqueness_of :title, scope: :code, message: "There's already a device of that title with this code"
 
         Entity = Entities::Device
       end

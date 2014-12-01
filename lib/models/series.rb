@@ -1,3 +1,4 @@
+require_relative './base'
 require_relative './manufacturer'
 require_relative './device_series'
 require_relative './parameter'
@@ -11,7 +12,7 @@ module OnOff
         include DataMapper::Resource
 
         property :id,     Serial, key: true, required: true
-        property :title,  String, required: true, unique: :manufacturer_id
+        property :title,  String, required: true
 
         belongs_to  :manufacturer, required: true
         has n,      :device_series, constraint: :destroy
@@ -21,8 +22,6 @@ module OnOff
         timestamps :at
 
         Entity = Entities::Series
-
-        validates_uniqueness_of :title, scope: :manufacturer_id, message: "There's already a series of that title for this manufacturer"
 
         def remember_devices(devices = [])
           @devices = devices

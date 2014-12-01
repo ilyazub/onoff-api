@@ -10,7 +10,7 @@ module OnOff
         include DataMapper::Resource
 
         property :id, Serial, required: true
-        property :title, String, required: true, unique: true
+        property :title, String, required: true
 
         has n, :devices, constraint: :destroy
 
