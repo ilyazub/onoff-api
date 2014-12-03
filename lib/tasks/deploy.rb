@@ -3,6 +3,7 @@ require_relative './import'
 desc 'Deploy and restart server'
 task deploy: [
   'deploy:update_code',
+  'db:migrate',
   'deploy:restart'
 ]
 

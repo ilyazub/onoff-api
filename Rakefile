@@ -37,7 +37,6 @@ namespace :db do
   desc "Migrate database"
   task :migrate do
     DataMapper.finalize
-    DataMapper.auto_migrate!
     DataMapper.auto_upgrade!
   end
 
