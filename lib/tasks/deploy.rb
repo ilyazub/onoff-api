@@ -74,7 +74,7 @@ namespace :deploy do
   def restart_server_command
     [
       "/home/#{@user}/.rbenv/shims/bundle exec rake app:kill",
-      "/home/#{@user}/.rbenv/shims/bundle exec puma --daemon -e production"
+      "/home/#{@user}/.rbenv/shims/bundle exec puma -C ./config/production.rb"
     ].join(" && ")
   end
 

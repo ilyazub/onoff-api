@@ -14,6 +14,7 @@ module OnOff
         property :code,         String,   required: true
         property :description,  String,   required: true
         property :selected,     Boolean,  default: false, required: true
+        property :image_url,    String
 
         belongs_to  :parameter,   required: true
         has n,      :sku_values,  'SKUValue', constraint: :destroy

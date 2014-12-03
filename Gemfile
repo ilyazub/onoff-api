@@ -13,6 +13,8 @@ gem 'rack-cors', require: 'rack/cors'
 
 gem 'roo'
 
+gem 'rmagick'
+
 group :development, :test do
   gem 'pry'
   gem 'pry-byebug'

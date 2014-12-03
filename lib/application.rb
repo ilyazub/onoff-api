@@ -21,6 +21,15 @@ module OnOff
         self
       end
 
+      def images_folder
+        folders = {
+          development: proc { File.join(File.dirname(root), '/onoff-images') },
+          production: proc { File.join(ENV['HOME'], '/images') }
+        }
+
+        folders[env.to_sym].call
+      end
+
       def connection_string
         @database.to_s
       end

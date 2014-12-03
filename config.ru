@@ -9,8 +9,6 @@ use Rack::Cors do
   end
 end
 
-# use Rack::CommonLogger, OnOff::API.application.logfile
-
 use Rack::Deflater
 
 run OnOff::API::Routes::Main

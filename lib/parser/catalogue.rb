@@ -11,7 +11,7 @@ module OnOff
           DEVICE_GROUP:   /\AГруппа устройств[\:]?[\s]*([А-Яа-я]+)\z/,  # Заголовок группы устройств
           PARAMETER:      /\AПараметр[\s]*(.*)[\s]*-[\s]*(.*)\z/,       # Строка с названием параметра
           OPTION:         /\AОпция[\s]*(.*)\z/,
-          SKU:            /\A(.*)[\s]*\*[\s]*(\d)+(?:.*)?\z/,
+          SKU:            /\A(.*)[\s]*\*[\s]*(\d+)(?:.*)?\z/,
           VALUE:          /\A([\d\w-]+)[\s]*[-:][\s]*(.*)\z/,
           INVALID_VALUE:  /\A(\d*[а-яА-Я]+\d*)[\s]*[-:][\s]*(.*)\z/
         }
@@ -90,18 +90,16 @@ module OnOff
         end
 
         def parse_sku(device, title, index)
-          return if String(title).strip == '' # Пропустить пустую ячейку
+          return if String(title).strip == '' || !title.match(PATTERNS[:OPTION]).nil? # Пропустить пустую ячейку или опцию
 
-          if title.match(PATTERNS[:OPTION]).nil? # Опции пропустить, т.к. они пока не поддерживаются
-            device_series = Models::DeviceSeries.first_or_create(device: device, series: Models::Series.get(index + 1)) # Создать серию устройств
+          device_series = Models::DeviceSeries.first_or_create(device: device, series: Models::Series.get(index + 1)) # Создать серию устройств
 
-            title =~ PATTERNS[:SKU]
-            title = $1 || title
-            amount = $2 || 1
+          title =~ PATTERNS[:SKU]
+          title = $1 || title
+          amount = $2 || 1
 
-            sku = Models::SKU.first_or_create(title: title.strip)
-            Models::DeviceSeriesSKU.create(sku: sku, device_series: device_series, amount: amount.to_i, unit_price: 0.0)
-          end
+          sku = Models::SKU.first_or_create(title: title.strip)
+          Models::DeviceSeriesSKU.create(sku: sku, device_series: device_series, amount: amount.to_i, unit_price: 0.0)
         end
 
         def parse_values(row, parameter_hash)
