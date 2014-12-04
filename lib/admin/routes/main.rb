@@ -63,7 +63,7 @@ module OnOff
               optional :clear_db,   type: Boolean
             end
             post do
-              DataMapper.auto_migrate! if params[:clear_db]
+              DataMapper.finalize.auto_migrate!.auto_upgrade! if params[:clear_db]
               import(:catalogue, OnOff::API::Parser::Catalogue.new)
               import(:price_list, OnOff::API::Parser::Prices.new)
             end

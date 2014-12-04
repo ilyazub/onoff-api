@@ -10,7 +10,7 @@ module OnOff
         include DataMapper::Resource
 
         property :compiled_title, String, required: true
-        property :description, String
+        property :description, String, length: 100
         property :unit_price, Float, required: true, default: 0.0
 
         belongs_to :sku_parameter, 'SKUParameter', key: true, required: true
