@@ -8,15 +8,18 @@ task deploy: [
 ]
 
 namespace :deploy do
-  @user = 'onoff'
-  @host = '166.63.124.211'
+  @user = 'deployer'
+  @host = '178.62.239.198'
   @repository = 'git@github.com:ilyazub/onoff-api.git'
   @branch = 'origin/master'
   @deployment_path = "/home/#{@user}/websites/onoff-api"
 
   desc 'Setup folder'
   task :setup do
-    remote_task(create_folder_if_not_exists)
+    remote_task([
+      create_folder_if_not_exists,
+      git_clone
+    ])
   end
 
   desc 'Update code'
@@ -59,6 +62,10 @@ namespace :deploy do
 
   def create_folder_if_not_exists
     "mkdir -p #{@deployment_path}"
+  end
+
+  def git_clone
+    "git clone -b #{@branch} #{@repository} #{@deployment_path}"
   end
 
   def update_code_command
