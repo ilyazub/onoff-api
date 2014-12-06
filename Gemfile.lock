@@ -1,11 +1,3 @@
-GIT
-  remote: git://github.com/datamapper/dm-core.git
-  revision: 03a6425d1616027dd8371ca4f5714c333ba7e789
-  branch: release-1.2
-  specs:
-    dm-core (1.2.1)
-      addressable (~> 2.3, >= 2.3.5)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -58,6 +50,8 @@ GEM
       dm-core (~> 1.2.0)
     dm-constraints (1.2.0)
       dm-core (~> 1.2.0)
+    dm-core (1.2.1)
+      addressable (~> 2.3)
     dm-do-adapter (1.2.0)
       data_objects (~> 0.10.6)
       dm-core (~> 1.2.0)
@@ -205,7 +199,6 @@ PLATFORMS
 DEPENDENCIES
   data_mapper
   database_cleaner
-  dm-core!
   dm-postgres-adapter
   dm-rspec
   factory_girl

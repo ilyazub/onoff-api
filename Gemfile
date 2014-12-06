@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'data_mapper'
-gem 'dm-core', github: 'datamapper/dm-core', branch: 'release-1.2'
 gem 'dm-postgres-adapter'
 
 gem 'puma'
