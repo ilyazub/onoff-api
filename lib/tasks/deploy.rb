@@ -80,10 +80,7 @@ namespace :deploy do
   end
 
   def restart_server_command
-    [
-      "/home/#{@user}/.rbenv/shims/bundle exec rake app:kill",
-      "/home/#{@user}/.rbenv/shims/bundle exec puma -C ./config/production.rb"
-    ].join(" && ")
+    "/home/#{@user}/.rbenv/shims/bundle exec pumactl -F ./config/production.rb restart"
   end
 
   def migrate_command

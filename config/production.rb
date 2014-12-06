@@ -3,7 +3,9 @@
 #
 # The default is the current directory.
 #
-# directory '/u/apps/lolcat'
+dir = '/home/deployer/websites/onoff-api'
+
+directory dir
 # Use an object or block as the rack application. This allows the
 # config file to be the application itself.
 #
@@ -18,7 +20,7 @@
 #
 # The default is “config.ru”.
 #
-# rackup '/u/apps/lolcat/config.ru'
+rackup "#{dir}/config.ru"
 # Set the environment in which the rack's app will run. The value must be a string.
 #
 # The default is “development”.
@@ -33,17 +35,17 @@ daemonize
 # daemonize false
 # Store the pid of the server in the file at “path”.
 #
-pidfile 'tmp/pids/rackup.pid'
+pidfile "#{dir}/tmp/pids/rackup.pid"
 # Use “path” as the file to store the server info state. This is
 # used by “pumactl” to query and control the server.
 #
-# state_path '/u/apps/lolcat/tmp/pids/puma.state'
+state_path "#{dir}/tmp/pids/puma.state"
 # Redirect STDOUT and STDERR to files specified. The 3rd parameter
 # (“append”) specifies whether the output is appended, the default is
 # “false”.
 #
-# stdout_redirect '/u/apps/lolcat/log/stdout', '/u/apps/lolcat/log/stderr'
-stdout_redirect 'log/stdout', 'log/production.log', true
+stdout_redirect "#{dir}/log/stdout", "#{dir}/log/production.log"
+# stdout_redirect 'log/stdout', 'log/stderr', true
 # Disable request logging.
 #
 # The default is “false”.
@@ -61,6 +63,7 @@ threads 1, 4
 # The default is “tcp://0.0.0.0:9292”.
 #
 # bind 'tcp://0.0.0.0:9292'
+# bind 'unix:///tmp/onoff_api.sock'
 # bind 'unix:///var/run/puma.sock'
 # bind 'unix:///var/run/puma.sock?umask=0111'
 # bind 'ssl://127.0.0.1:9292?key=path_to_key&cert=path_to_cert'
@@ -86,14 +89,14 @@ threads 1, 4
 #
 # The default is “0”.
 #
-# workers 2
+workers 4
 # Code to run when a worker boots to setup the process before booting
 # the app.
 #
 # This can be called multiple times to add hooks.
 #
 # on_worker_boot do
-# puts 'On worker boot...'
+#   DataMapper.finalize
 # end
 # Code to run when a worker boots to setup the process after booting
 # the app.
@@ -110,7 +113,7 @@ threads 1, 4
 # prune_bundler
 # Preload the application before starting the workers; this conflicts with
 # phased restart feature. (off by default)
-# preload_app!
+preload_app!
 # Additional text to display in process listing
 #
 # tag 'app name'
